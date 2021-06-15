@@ -15,6 +15,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\InvestimentReport.Domain\InvestimentReport.Domain.csproj" />
+    <ProjectReference Include="..\InvestimentReport.Application\InvestimentReport.Application.csproj" />
+    <ProjectReference Include="..\InvestimentReport.Infrastructure\InvestimentReport.Infrastructure.csproj" />
+    <ProjectReference Include="..\InvestimentReport.WebApi\InvestimentReport.WebApi.csproj" />
   </ItemGroup>
 
 </Project>
