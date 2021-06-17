@@ -3,8 +3,10 @@ using Newtonsoft.Json;
 
 namespace InvestimentReport.Application.DTOs
 {
+
     public class FundsDTO
     {
+
         [JsonProperty("capitalInvestido")]
         public int InvestedCapital { get; set; }
 
@@ -28,5 +30,7 @@ namespace InvestimentReport.Application.DTOs
 
         [JsonProperty("quantity")]
         public int Quantity { get; set; }
+
     }
+
 }

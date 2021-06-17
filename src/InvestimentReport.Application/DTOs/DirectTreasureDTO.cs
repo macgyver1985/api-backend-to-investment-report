@@ -3,8 +3,10 @@ using Newtonsoft.Json;
 
 namespace InvestimentReport.Application.DTOs
 {
+
     public class DirectTreasureDTO
     {
+
         [JsonProperty("valorInvestido")]
         public double InvestedValue { get; set; }
 
@@ -28,5 +30,7 @@ namespace InvestimentReport.Application.DTOs
 
         [JsonProperty("nome")]
         public string Name { get; set; }
+
     }
+
 }
