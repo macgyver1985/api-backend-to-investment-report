@@ -62,24 +62,11 @@ namespace InvestimentReport.Application.Service
             if (processId == Guid.Empty)
                 throw new ArgumentException("processId is empty.");
 
-            try
-            {
-                string responseCache = await this.cacheAdapter.Obtain(CACHE_KEY);
+            List<Investiment> result = await this.GetCachedInvestments(processId) ?? new List<Investiment>();
 
-                if (!string.IsNullOrWhiteSpace(responseCache))
-                    return JsonConvert.DeserializeObject<IList<Investiment>>(responseCache);
-            }
-            catch (Exception ex)
-            {
-                await this.loggerAdapter
-                    .Error<ObtainAllInvestimentsHandler>(
-                        processId,
-                        $"Erro ao tentar obter o cache {CACHE_KEY}.",
-                        ex
-                    );
-            }
+            if (result.Any())
+                return result;
 
-            List<Investiment> result = new List<Investiment>();
             bool hasError = false;
 
             await Task.WhenAll(
@@ -161,34 +148,59 @@ namespace InvestimentReport.Application.Service
             );
 
             if (!hasError && result.Any())
-            {
-                string payload = string.Empty;
-
-                try
-                {
-                    TimeSpan expire = TimeSpan.Parse(CACHE_EXPIRE) - DateTime.UtcNow.TimeOfDay;
-
-                    payload = JsonConvert.SerializeObject(result, Formatting.Indented);
-
-                    await this.cacheAdapter?.Register(
-                        CACHE_KEY,
-                        payload,
-                        expire
-                    );
-                }
-                catch (Exception ex)
-                {
-                    await this.loggerAdapter
-                        .Error<ObtainAllInvestimentsHandler>(
-                            processId,
-                            $"Erro ao tentar registrar o cache {CACHE_KEY}.",
-                            ex,
-                            payload
-                        );
-                }
-            }
+                await this.ResgisterInvestimentsInCache(processId, result);
 
             return result;
+        }
+
+        private async Task<List<Investiment>> GetCachedInvestments(Guid processId)
+        {
+            try
+            {
+                string responseCache = await this.cacheAdapter.Obtain(CACHE_KEY);
+
+                if (!string.IsNullOrWhiteSpace(responseCache))
+                    return JsonConvert.DeserializeObject<List<Investiment>>(responseCache);
+            }
+            catch (Exception ex)
+            {
+                await this.loggerAdapter
+                    .Error<ObtainAllInvestimentsHandler>(
+                        processId,
+                        $"Erro ao tentar obter o cache {CACHE_KEY}.",
+                        ex
+                    );
+            }
+
+            return null;
+        }
+
+        private async Task ResgisterInvestimentsInCache(Guid processId, List<Investiment> list)
+        {
+            string payload = string.Empty;
+
+            try
+            {
+                TimeSpan expire = TimeSpan.Parse(CACHE_EXPIRE) - DateTime.UtcNow.TimeOfDay;
+
+                payload = JsonConvert.SerializeObject(list, Formatting.Indented);
+
+                await this.cacheAdapter?.Register(
+                    CACHE_KEY,
+                    payload,
+                    expire
+                );
+            }
+            catch (Exception ex)
+            {
+                await this.loggerAdapter
+                    .Error<ObtainAllInvestimentsHandler>(
+                        processId,
+                        $"Erro ao tentar registrar o cache {CACHE_KEY}.",
+                        ex,
+                        payload
+                    );
+            }
         }
 
     }
