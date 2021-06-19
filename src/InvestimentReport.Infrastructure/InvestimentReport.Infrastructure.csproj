@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\InvestimentReport.Application\InvestimentReport.Application.csproj" />
+    <ProjectReference Include="..\InvestimentReport.CrossCutting\InvestimentReport.CrossCutting.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

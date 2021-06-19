@@ -4,6 +4,7 @@
     <ProjectReference Include="..\InvestimentReport.Application\InvestimentReport.Application.csproj" />
     <ProjectReference Include="..\InvestimentReport.Domain\InvestimentReport.Domain.csproj" />
     <ProjectReference Include="..\InvestimentReport.Infrastructure\InvestimentReport.Infrastructure.csproj" />
+    <ProjectReference Include="..\InvestimentReport.CrossCutting\InvestimentReport.CrossCutting.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

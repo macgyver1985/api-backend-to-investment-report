@@ -18,6 +18,7 @@
     <ProjectReference Include="..\InvestimentReport.Application\InvestimentReport.Application.csproj" />
     <ProjectReference Include="..\InvestimentReport.Infrastructure\InvestimentReport.Infrastructure.csproj" />
     <ProjectReference Include="..\InvestimentReport.WebApi\InvestimentReport.WebApi.csproj" />
+    <ProjectReference Include="..\InvestimentReport.CrossCutting\InvestimentReport.CrossCutting.csproj" />
   </ItemGroup>
 
 </Project>
