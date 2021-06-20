@@ -1,23 +1,6 @@
 version: 2.1
 
-orbs:
-  windows: circleci/windows@2.2.0
-
 jobs:
-  # test:
-  #   description: Setup and run application tests
-  #   executor:
-  #     name: windows/default
-  #   steps:
-  #     - checkout
-  #     - run:
-  #         name: "Run Application Tests"
-  #         command: dotnet.exe test .\src\ -v n --results-directory:coverage --collect:"Code Coverage"
-  #     - run:
-  #         name: "Print Working Directory"
-  #         command: pwd
-  #     - store_artifacts:
-  #         path: C:\Users\circleci\project\coverage
   test:
     docker:
       - image: mcr.microsoft.com/dotnet/core/sdk:3.1
