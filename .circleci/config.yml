@@ -12,6 +12,12 @@ jobs:
           command: dotnet test ./src -v n --results-directory:coverage --collect:"XPlat Code Coverage"
       - store_test_results:
           path: /api-investiment-report/coverage
+  build:
+    docker:
+      - image: mcr.microsoft.com/dotnet/core/sdk:3.1
+    working_directory: /api-investiment-report
+    steps:
+      - checkout
       - run:
           name: Compile Application In Release
           command: |
@@ -23,6 +29,6 @@ workflows:
   test_and_build:
     jobs:
       - test
-      # - build:
-      #     requires:
-      #       - test
+      - build:
+          requires:
+            - test
