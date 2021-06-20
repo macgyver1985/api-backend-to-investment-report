@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  test:
+  test-and-build:
     docker:
       - image: mcr.microsoft.com/dotnet/core/sdk:3.1
     working_directory: /api-investiment-report
@@ -12,12 +12,6 @@ jobs:
           command: dotnet test ./src -v n --results-directory:coverage --collect:"XPlat Code Coverage"
       - store_test_results:
           path: /api-investiment-report/coverage
-  build:
-    docker:
-      - image: mcr.microsoft.com/dotnet/core/sdk:3.1
-    working_directory: /api-investiment-report
-    steps:
-      - checkout
       - run:
           name: Compile Application In Release
           command: |
@@ -25,10 +19,29 @@ jobs:
             dotnet publish ./src/InvestimentReport.WebApi/InvestimentReport.WebApi.csproj -c Release -o ./publish
       - store_artifacts:
           path: /api-investiment-report/publish
+      - save_cache:
+          key: v1-app-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - /api-investiment-report/publish
+  deploy:
+    machine:
+      image: mcr.microsoft.com/dotnet/core/aspnet:3.1
+      docker_layer_caching: true
+    working_directory: /wwwroot
+    steps:
+      - restore_cache:
+          keys:
+            - v1-app-{{ .Environment.CIRCLE_SHA1 }}
+      - checkout
+      - run:
+          name: Deploy Master to Heroku
+          command: |
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP.git master
+            ASPNETCORE_URLS="http://*:$PORT" dotnet InvestimentReport.WebApi.dll
 workflows:
   test_and_build:
     jobs:
-      - test
-      - build:
+      - test-and-build
+      - deploy:
           requires:
-            - test
+            - test-and-build
