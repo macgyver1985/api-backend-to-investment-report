@@ -24,16 +24,15 @@ jobs:
     working_directory: ./api-investiment-report
     steps:
       - checkout
-      - run:
-          name: Copy Files
-          command: cp -r ./src ./
+      - run: |
+          docker cp ./src ./src
       - run:
           name: Execute Test Application
-          command: dotnet.exe test ./src -v n --results-directory:coverage --collect:"Code Coverage"
+          command: dotnet.exe test ./src -v n --results-directory:coverage --collect:"XPlat Code Coverage"
       - store_test_results:
-          path: ./src/coverage
+          path: /api-investiment-report/src/coverage
       - store_artifacts:
-          path: ./src/coverage
+          path: /api-investiment-report/src/coverage/**/*.xml
 workflows:
   test_and_build:
     jobs:
