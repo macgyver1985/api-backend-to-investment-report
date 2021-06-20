@@ -17,6 +17,7 @@ jobs:
       #     command: |
       #       dotnet build ./src --configuration Release
       #       dotnet publish ./src/InvestimentReport.WebApi/InvestimentReport.WebApi.csproj -c Release -o ./publish
+      #       cp DockerFile ./publish
       # - store_artifacts:
       #     path: /api-investiment-report/publish
       # - save_cache:
@@ -26,17 +27,16 @@ jobs:
   deploy:
     machine: true
     steps:
-      # - restore_cache:
-      #     keys:
-      #       - v1-app-{{ .Environment.CIRCLE_SHA1 }}
       - checkout
       - run:
           name: Build and push Docker image to Heroku
           command: |
+            echo $HEROKU_API_KEY
+            echo $HEROKU_APP_NAME
             sudo curl https://cli-assets.heroku.com/install.sh | sh
-            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:login
-            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:push -a $HEROKU_APP web
-            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:release -a $HEROKU_APP web
+            HEROKU_API_KEY=$HEROKU_API_KEY heroku container:login
+            HEROKU_API_KEY=$HEROKU_API_KEY heroku container:push -a $HEROKU_APP_NAME web
+            HEROKU_API_KEY=$HEROKU_API_KEY heroku container:release -a $HEROKU_APP_NAME web
 workflows:
   test-build-deploy:
     jobs:
