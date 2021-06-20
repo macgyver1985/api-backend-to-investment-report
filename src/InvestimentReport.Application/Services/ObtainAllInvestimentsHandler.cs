@@ -7,7 +7,8 @@ using InvestimentReport.Application.Helper;
 using InvestimentReport.Application.Interfaces.Adapters;
 using InvestimentReport.Application.Interfaces.Services;
 using InvestimentReport.CrossCutting.Interfaces;
-using InvestimentReport.Domain;
+using InvestimentReport.Domain.Enums;
+using InvestimentReport.Domain.Investiments;
 using Newtonsoft.Json;
 
 namespace InvestimentReport.Application.Service
@@ -78,7 +79,18 @@ namespace InvestimentReport.Application.Service
 
                         list?.ToList().ForEach(t =>
                             {
-                                var item = new Investiment();
+                                var item = InvestimentFactory.CreateInvestiment(
+                                    ETypeInvestiment.DirectTreasure,
+                                    new InvestimentData()
+                                    {
+                                        InvestedValue = t.InvestedValue,
+                                        CurrentValue = t.Amount,
+                                        DueDate = t.DueDate,
+                                        PurchaseDate = t.PurchaseDate,
+                                        Index = t.Index,
+                                        Name = t.Name
+                                    }
+                                );
 
                                 result.Add(item);
                             });
@@ -103,7 +115,20 @@ namespace InvestimentReport.Application.Service
 
                         list?.ToList().ForEach(t =>
                             {
-                                var item = new Investiment();
+                                var item = InvestimentFactory.CreateInvestiment(
+                                    ETypeInvestiment.FixedIncome,
+                                    new InvestimentData()
+                                    {
+                                        InvestedValue = t.InvestedCapital,
+                                        CurrentValue = t.CurrentCapital,
+                                        DueDate = t.DueDate,
+                                        PurchaseDate = t.OperationDate,
+                                        Index = t.Index,
+                                        Name = t.Name,
+                                        Quantity = t.Quantity,
+                                        UnitaryValue = t.UnitaryValue
+                                    }
+                                );
 
                                 result.Add(item);
                             });
@@ -128,7 +153,19 @@ namespace InvestimentReport.Application.Service
 
                         list?.ToList().ForEach(t =>
                             {
-                                var item = new Investiment();
+                                var item = InvestimentFactory.CreateInvestiment(
+                                    ETypeInvestiment.Funds,
+                                    new InvestimentData()
+                                    {
+                                        InvestedValue = t.InvestedCapital,
+                                        CurrentValue = t.CurrentValue,
+                                        DueDate = t.RedemptionDate,
+                                        Name = t.Name,
+                                        PurchaseDate = t.PurchaseDate,
+                                        Quantity = t.Quantity,
+                                        AdministrativeTax = t.TotalTaxes
+                                    }
+                                );
 
                                 result.Add(item);
                             });

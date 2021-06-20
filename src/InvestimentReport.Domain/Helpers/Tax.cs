@@ -1,4 +1,6 @@
-namespace InvestimentReport.Domain.Helper
+using InvestimentReport.Domain.Investiments;
+
+namespace InvestimentReport.Domain.Helpers
 {
 
     public abstract class Tax

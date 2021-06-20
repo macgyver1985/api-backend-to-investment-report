@@ -1,13 +1,14 @@
 using System;
-using InvestimentReport.Domain.Helper;
+using InvestimentReport.Domain.Helpers;
+using InvestimentReport.Domain.Investiments;
 
-namespace InvestimentReport.Domain
+namespace InvestimentReport.Domain.Taxes
 {
 
-    public sealed class IrTax : Tax
+    public sealed class IR : Tax
     {
 
-        public IrTax(double calculationBasis)
+        public IR(double calculationBasis)
         {
             this.Name = "IR";
             this.CalculationBasis = calculationBasis;

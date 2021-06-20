@@ -26,7 +26,7 @@ namespace InvestimentReport.Application.DTOs
         public string Name { get; set; }
 
         [JsonProperty("totalTaxas")]
-        public double OtherTaxes { get; set; }
+        public double TotalTaxes { get; set; }
 
         [JsonProperty("quantity")]
         public int Quantity { get; set; }

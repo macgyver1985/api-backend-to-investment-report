@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using InvestimentReport.Domain.Enums;
-using InvestimentReport.Domain.Helper;
+using InvestimentReport.Domain.Helpers;
+using InvestimentReport.Domain.Interfaces;
 
-namespace InvestimentReport.Domain
+namespace InvestimentReport.Domain.Investiments
 {
 
     public class Investiment
@@ -13,9 +14,11 @@ namespace InvestimentReport.Domain
         #region Variables
 
         private readonly List<Tax> taxes = null;
-        private readonly List<Guarantee> guaranteeList = null;
+        private readonly List<IGuarantee> guaranteeList = null;
         private bool isCalculatedTaxes = false;
         private bool isCalculatedRedemptionValue = false;
+        private readonly TimeSpan halfOfTheTime;
+        private readonly TimeSpan missingThreeMonths;
 
         #endregion
 
@@ -37,9 +40,11 @@ namespace InvestimentReport.Domain
 
         public DateTime PurchaseDate { get; private set; }
 
+        public TimeSpan TotalTime { get; private set; }
+
         public string Index { get; private set; }
 
-        public ETypeInvestiment Type { get; }
+        public ETypeInvestiment Type { get; private set; }
 
         public string Name { get; private set; }
 
@@ -61,7 +66,7 @@ namespace InvestimentReport.Domain
             }
         }
 
-        public IReadOnlyList<Guarantee> GuaranteeList
+        public IReadOnlyList<IGuarantee> GuaranteeList
         {
             get
             {
@@ -73,10 +78,24 @@ namespace InvestimentReport.Domain
 
         #region Constructors
 
-        public Investiment()
+        internal Investiment(ETypeInvestiment typeInvestiment, InvestimentData data)
         {
             this.taxes = new List<Tax>();
-            this.guaranteeList = new List<Guarantee>();
+            this.guaranteeList = new List<IGuarantee>();
+
+            this.Type = typeInvestiment;
+            this.InvestedValue = data.InvestedValue;
+            this.CurrentValue = data.CurrentValue;
+            this.UnitaryValue = data.UnitaryValue;
+            this.DueDate = data.DueDate;
+            this.PurchaseDate = data.PurchaseDate;
+            this.Index = data.Index;
+            this.Name = data.Name;
+            this.Quantity = data.Quantity;
+
+            this.TotalTime = this.DueDate.Subtract(this.PurchaseDate);
+            this.halfOfTheTime = this.TotalTime / 2;
+            this.missingThreeMonths = this.DueDate.AddMonths(-3).Subtract(this.PurchaseDate);
         }
 
         #endregion
@@ -88,15 +107,12 @@ namespace InvestimentReport.Domain
             if (!this.isCalculatedTaxes)
                 this.CalculateTaxes();
 
-            TimeSpan totalTime = this.DueDate.Subtract(this.PurchaseDate);
-            TimeSpan halfOfTheTime = totalTime / 2;
-            TimeSpan missingThreeMonths = this.DueDate.AddMonths(-3).Subtract(this.PurchaseDate);
             TimeSpan timeLeft = this.DueDate.Subtract(DateTime.UtcNow);
             double lossPercentage = 30D;
 
-            if (timeLeft > missingThreeMonths && timeLeft <= halfOfTheTime)
+            if (timeLeft > this.missingThreeMonths && timeLeft <= this.halfOfTheTime)
                 lossPercentage = 15D;
-            else if (timeLeft > TimeSpan.MinValue && timeLeft <= missingThreeMonths)
+            else if (timeLeft > TimeSpan.MinValue && timeLeft <= this.missingThreeMonths)
                 lossPercentage = 6D;
             else if (timeLeft <= TimeSpan.MinValue)
                 lossPercentage = 0D;
@@ -137,7 +153,7 @@ namespace InvestimentReport.Domain
             return this;
         }
 
-        public Investiment AddGuarantee(Guarantee guarantee)
+        public Investiment AddGuarantee(IGuarantee guarantee)
         {
             if (this.guaranteeList.FirstOrDefault(t => t.Name == guarantee.Name) != null)
                 return this;
