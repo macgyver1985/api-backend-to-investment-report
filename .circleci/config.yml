@@ -31,12 +31,12 @@ jobs:
       - run:
           name: Build and push Docker image to Heroku
           command: |
-            echo $HEROKU_API_KEY
-            echo $HEROKU_APP_NAME
+            ls
+            docker build -t macgyver1985/api-backend-to-investment-report .
             sudo curl https://cli-assets.heroku.com/install.sh | sh
             HEROKU_API_KEY=$HEROKU_API_KEY heroku container:login
-            HEROKU_API_KEY=$HEROKU_API_KEY heroku container:push -a $HEROKU_APP_NAME web
-            HEROKU_API_KEY=$HEROKU_API_KEY heroku container:release -a $HEROKU_APP_NAME web
+            HEROKU_API_KEY=$HEROKU_API_KEY heroku container:push web -a $HEROKU_APP_NAME
+            HEROKU_API_KEY=$HEROKU_API_KEY heroku container:release web -a $HEROKU_APP_NAME
 workflows:
   test-build-deploy:
     jobs:
