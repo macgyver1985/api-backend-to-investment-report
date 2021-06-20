@@ -24,8 +24,6 @@ jobs:
     working_directory: ./api-investiment-report
     steps:
       - checkout
-      - run: |
-          docker cp ./src ./src
       - run:
           name: Execute Test Application
           command: dotnet.exe test ./src -v n --results-directory:coverage --collect:"XPlat Code Coverage"
