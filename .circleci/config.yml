@@ -12,18 +12,6 @@ jobs:
           command: dotnet test ./src -v n --results-directory:coverage --collect:"XPlat Code Coverage"
       - store_test_results:
           path: /api-investiment-report/coverage
-      # - run:
-      #     name: Compile Application In Release
-      #     command: |
-      #       dotnet build ./src --configuration Release
-      #       dotnet publish ./src/InvestimentReport.WebApi/InvestimentReport.WebApi.csproj -c Release -o ./publish
-      #       cp DockerFile ./publish
-      # - store_artifacts:
-      #     path: /api-investiment-report/publish
-      # - save_cache:
-      #     key: v1-app-{{ .Environment.CIRCLE_SHA1 }}
-      #     paths:
-      #       - /api-investiment-report/publish
   deploy:
     machine: true
     steps:
@@ -32,11 +20,10 @@ jobs:
           name: Build and push Docker image to Heroku
           command: |
             ls
-            docker build -f DockerFile -t macgyver1985/api-backend-to-investment-report .
             sudo curl https://cli-assets.heroku.com/install.sh | sh
             HEROKU_API_KEY=$HEROKU_API_KEY heroku container:login
-            HEROKU_API_KEY=$HEROKU_API_KEY heroku container:push web DockerFile -a $HEROKU_APP_NAME
-            HEROKU_API_KEY=$HEROKU_API_KEY heroku container:release web DockerFile -a $HEROKU_APP_NAME
+            HEROKU_API_KEY=$HEROKU_API_KEY heroku container:push web -a $HEROKU_APP_NAME
+            HEROKU_API_KEY=$HEROKU_API_KEY heroku container:release web -a $HEROKU_APP_NAME
 workflows:
   test-build-deploy:
     jobs:
