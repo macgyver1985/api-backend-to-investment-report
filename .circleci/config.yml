@@ -24,9 +24,8 @@ jobs:
           paths:
             - /api-investiment-report/publish
   deploy:
-    machine:
-      image: mcr.microsoft.com/dotnet/core/aspnet:3.1
-      docker_layer_caching: false
+    docker:
+      - image: mcr.microsoft.com/dotnet/core/aspnet:3.1
     working_directory: /wwwroot
     steps:
       - restore_cache:
