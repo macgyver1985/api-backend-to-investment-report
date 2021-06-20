@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  test-and-build:
+  test:
     docker:
       - image: mcr.microsoft.com/dotnet/core/sdk:3.1
     working_directory: /api-investiment-report
@@ -12,35 +12,35 @@ jobs:
           command: dotnet test ./src -v n --results-directory:coverage --collect:"XPlat Code Coverage"
       - store_test_results:
           path: /api-investiment-report/coverage
-      - run:
-          name: Compile Application In Release
-          command: |
-            dotnet build ./src --configuration Release
-            dotnet publish ./src/InvestimentReport.WebApi/InvestimentReport.WebApi.csproj -c Release -o ./publish
-      - store_artifacts:
-          path: /api-investiment-report/publish
-      - save_cache:
-          key: v1-app-{{ .Environment.CIRCLE_SHA1 }}
-          paths:
-            - /api-investiment-report/publish
+      # - run:
+      #     name: Compile Application In Release
+      #     command: |
+      #       dotnet build ./src --configuration Release
+      #       dotnet publish ./src/InvestimentReport.WebApi/InvestimentReport.WebApi.csproj -c Release -o ./publish
+      # - store_artifacts:
+      #     path: /api-investiment-report/publish
+      # - save_cache:
+      #     key: v1-app-{{ .Environment.CIRCLE_SHA1 }}
+      #     paths:
+      #       - /api-investiment-report/publish
   deploy:
-    docker:
-      - image: mcr.microsoft.com/dotnet/core/aspnet:3.1
-    working_directory: /wwwroot
+    machine: true
     steps:
-      - restore_cache:
-          keys:
-            - v1-app-{{ .Environment.CIRCLE_SHA1 }}
+      # - restore_cache:
+      #     keys:
+      #       - v1-app-{{ .Environment.CIRCLE_SHA1 }}
       - checkout
       - run:
-          name: Deploy Master to Heroku
+          name: Build and push Docker image to Heroku
           command: |
-            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP.git master
-            ASPNETCORE_URLS="http://*:$PORT" dotnet InvestimentReport.WebApi.dll
+            sudo curl https://cli-assets.heroku.com/install.sh | sh
+            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:login
+            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:push -a $HEROKU_APP web
+            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:release -a $HEROKU_APP web
 workflows:
-  test_and_build:
+  test-build-deploy:
     jobs:
-      - test-and-build
+      - test
       - deploy:
           requires:
-            - test-and-build
+            - test
