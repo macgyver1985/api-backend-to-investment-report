@@ -9,7 +9,3 @@ ENV ASPNETCORE_ENVIRONMENT=Development
 WORKDIR /wwwroot
 COPY --from=build /api-investiment-report/publish .
 ENTRYPOINT [ "dotnet", "InvestimentReport.WebApi.dll" ]
-# RUN useradd -m macgyver1985
-# USER macgyver1985
-
-# CMD ASPNETCORE_URLS="http://*:$PORT" dotnet run InvestimentReport.WebApi.dll
