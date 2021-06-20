@@ -35,8 +35,8 @@ jobs:
             docker build -f DockerFile -t macgyver1985/api-backend-to-investment-report .
             sudo curl https://cli-assets.heroku.com/install.sh | sh
             HEROKU_API_KEY=$HEROKU_API_KEY heroku container:login
-            HEROKU_API_KEY=$HEROKU_API_KEY heroku container:push web -a $HEROKU_APP_NAME
-            HEROKU_API_KEY=$HEROKU_API_KEY heroku container:release web -a $HEROKU_APP_NAME
+            HEROKU_API_KEY=$HEROKU_API_KEY heroku container:push web DockerFile -a $HEROKU_APP_NAME
+            HEROKU_API_KEY=$HEROKU_API_KEY heroku container:release web DockerFile -a $HEROKU_APP_NAME
 workflows:
   test-build-deploy:
     jobs:
