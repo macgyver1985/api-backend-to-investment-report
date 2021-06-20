@@ -4,16 +4,21 @@ jobs:
   test:
     docker:
       - image: mcr.microsoft.com/dotnet/core/sdk:3.1
-    working_directory: ./api-investiment-report
+    working_directory: /api-investiment-report
     steps:
       - checkout
       - run:
           name: Execute Test Application
           command: dotnet test ./src -v n --results-directory:coverage --collect:"XPlat Code Coverage"
       - store_test_results:
-          path: coverage
-      # - store_artifacts:
-      #     path: coverage
+          path: /api-investiment-report/coverage
+      - run:
+          name: Compile Application In Release
+          command: |
+            dotnet build ./src --configuration Release
+            dotnet publish ./src/InvestimentReport.WebApi/InvestimentReport.WebApi.csproj -c Release -o ./publish
+      - store_artifacts:
+          path: /api-investiment-report/publish
 workflows:
   test_and_build:
     jobs:
