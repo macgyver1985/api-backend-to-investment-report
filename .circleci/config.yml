@@ -17,16 +17,24 @@ jobs:
           name: "Print Working Directory"
           command: pwd
       - store_artifacts:
-          path: C:\Users\circleci\project\test_coverage
+          path: C:\Users\circleci\project\coverage
   build:
-    description: Build application with Release configuration
-    executor:
-      name: windows/default
+    docker:
+      - image: mcr.microsoft.com/dotnet/core/sdk:3.1
     steps:
       - checkout
       - run:
-          name: "Build Application according to some given configuration"
-          command: dotnet.exe build .\src\ --configuration Release
+          name: Copy Files
+          command: copy ./src ./app/src
+      - run:
+          name: Execute Test Application
+          command: |
+            cd app
+            dotnet.exe test ./src -v n --results-directory:coverage --collect:"Code Coverage"
+      - store_test_results:
+          path: ~/src/coverage
+      - store_artifacts:
+          path: ~/src/coverage
 workflows:
   test_and_build:
     jobs:
