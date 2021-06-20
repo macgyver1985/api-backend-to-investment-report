@@ -26,7 +26,7 @@ jobs:
       - checkout
       - run:
           name: Execute Test Application
-          command: dotnet.exe test ./src -v n --results-directory:coverage --collect:"XPlat Code Coverage"
+          command: dotnet test ./src -v n --results-directory:coverage --collect:"XPlat Code Coverage"
       - store_test_results:
           path: /api-investiment-report/src/coverage
       - store_artifacts:
