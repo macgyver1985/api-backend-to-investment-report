@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using InvestimentReport.Application.Interfaces.Adapters;
 using StackExchange.Redis;
 using InvestimentReport.Application.Helper;
+using System.Text.RegularExpressions;
 
 namespace InvestimentReport.Infrastructure.Cache
 {
@@ -18,9 +19,22 @@ namespace InvestimentReport.Infrastructure.Cache
             if (configuration == null)
                 throw new ArgumentException("Configuration is null.");
 
-            this.connection = ConnectionMultiplexer.Connect(
-                configuration["REDIS_URL"]
-            );
+            if (string.IsNullOrEmpty(configuration["REDIS_URL"]))
+                throw new ArgumentException("REDIS_URL is null.");
+
+            string connectionString = string.Empty;
+
+            if (new Regex(@"^(redis:\/\/)").IsMatch(configuration["REDIS_URL"]))
+            {
+                var redisUri = new Uri(configuration["REDIS_URL"]);
+                var userInfo = redisUri.UserInfo.Split(':');
+
+                connectionString = $"{redisUri.Host}:{redisUri.Port},password={userInfo[1]}";
+            }
+            else
+                connectionString = configuration["REDIS_URL"];
+
+            this.connection = ConnectionMultiplexer.Connect(connectionString);
         }
 
         protected override void Dispose(bool disposing)
