@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 namespace InvestimentReport.Application.Service
 {
 
-    public sealed class ObtainAllInvestimentsHandler : Handler, IObtainAllInvestimentsHandler
+    public sealed class ObtainAllInvestimentsHandler : HandlerHelper, IObtainAllInvestimentsHandler
     {
 
         private readonly ICache cacheAdapter = null;
