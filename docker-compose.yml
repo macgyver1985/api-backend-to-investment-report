@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+    redis:
+        image: redis
+        container_name: redis
+        command: redis-server --requirepass *hWuJ@e>sv}LG)W6=^F]
+        ports: 
+            - "6379:6379"
+        volumes:
+            - redis-data:/data
+        hostname: redis-local
+        networks:
+            - development-network
+    
+    api:
+        build: 
+            dockerfile: Dockerfile.local
+            context: .
+        image: macgyver1985/api-backend-to-investiment-report
+        container_name: api-investiment-report
+        ports:
+            - "8080:80"
+        networks:
+            - development-network
+        depends_on:
+            - "redis"
+
+networks:
+    development-network:
+        driver: bridge
+
+volumes:
+    redis-data:

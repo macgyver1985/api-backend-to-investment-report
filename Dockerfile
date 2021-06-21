@@ -5,7 +5,7 @@ RUN dotnet build ./src --configuration Release
 RUN dotnet publish ./src/InvestimentReport.WebApi/InvestimentReport.WebApi.csproj -c Release -o ./publish
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
-ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_ENVIRONMENT=Production
 WORKDIR /wwwroot
 COPY --from=build /api-investiment-report/publish .
 
