@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/InvestimentReport.Tests/bin/Debug/netcoreapp3.1/InvestimentReport.Tests.dll",
+            "program": "${workspaceFolder}/src/InvestimentReport.WebApi/bin/Debug/netcoreapp3.1/InvestimentReport.WebApi.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/InvestimentReport.Tests",
+            "cwd": "${workspaceFolder}/src/InvestimentReport.WebApi",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false

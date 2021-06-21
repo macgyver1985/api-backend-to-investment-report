@@ -3,13 +3,13 @@ using System;
 namespace InvestimentReport.Application.Helper
 {
 
-    public abstract class Handler : IDisposable
+    public abstract class CacheHelper : IDisposable
     {
 
         protected volatile object synchronizeTasks = new object();
         protected bool disposed = false;
 
-        ~Handler()
+        ~CacheHelper()
         {
             Dispose(false);
         }

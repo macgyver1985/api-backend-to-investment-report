@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 
 services:
     redis:
@@ -12,7 +12,8 @@ services:
         hostname: redis-local
         networks:
             - development-network
-    
+        restart: on-failure
+
     api:
         build: 
             dockerfile: Dockerfile.local
@@ -23,6 +24,7 @@ services:
             - "8080:80"
         networks:
             - development-network
+        restart: on-failure
         depends_on:
             - "redis"
 
