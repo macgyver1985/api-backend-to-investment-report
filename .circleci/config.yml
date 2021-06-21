@@ -31,5 +31,6 @@ workflows:
           requires:
             - test
           filters:
-            only:
-              - master
+            branches:
+              only:
+                - master
