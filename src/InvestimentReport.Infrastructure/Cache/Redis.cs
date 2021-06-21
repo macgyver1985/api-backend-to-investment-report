@@ -19,7 +19,7 @@ namespace InvestimentReport.Infrastructure.Cache
                 throw new ArgumentException("Configuration is null.");
 
             this.connection = ConnectionMultiplexer.Connect(
-                configuration.GetConnectionString("redis")
+                configuration["REDIS_URL"]
             );
         }
 
