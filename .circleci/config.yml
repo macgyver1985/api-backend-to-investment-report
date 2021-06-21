@@ -26,9 +26,7 @@ jobs:
 workflows:
   test-build-deploy:
     jobs:
-      - test:
-          filters:
-            only: master
+      - test
       - deploy:
           requires:
             - test
