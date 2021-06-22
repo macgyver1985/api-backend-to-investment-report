@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using InvestimentReport.Application.Interfaces.Adapters;
+using InvestimentReport.Application.Interfaces.Services;
+using InvestimentReport.Application.Service;
 using InvestimentReport.CrossCutting.Trace;
 using InvestimentReport.CrossCutting.Trace.Interfaces;
 using InvestimentReport.Infrastructure.Cache;
+using InvestimentReport.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,6 +33,8 @@ namespace InvestimentReport.WebApi
         {
             services.AddSingleton<ILogger, LoggerInFile>();
             services.AddSingleton<ICache, Redis>();
+            services.AddSingleton<IObtainAllInvestimentsHandler, ObtainAllInvestimentsHandler>();
+            services.AddSingleton<IGetInvestiments, GetInvestimentService>();
             services.AddControllers();
         }
 

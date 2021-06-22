@@ -121,7 +121,7 @@ namespace InvestimentReport.Domain.Investiments
             lossValue = Math.Round(lossValue, 3);
 
             this.LossValueOnRedemption = lossValue;
-            this.RedemptionValue = this.CurrentValue - this.LossValueOnRedemption - this.TotalTaxes;
+            this.RedemptionValue = Math.Round(this.CurrentValue - this.LossValueOnRedemption - this.TotalTaxes, 3);
             this.isCalculatedRedemptionValue = true;
 
             return this;

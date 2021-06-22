@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 namespace InvestimentReport.Infrastructure.Cache
 {
 
-    public sealed class Redis : CacheHelper, ICache
+    public sealed class Redis : AdapterHelper, ICache
     {
 
         private readonly ConnectionMultiplexer connection;

@@ -8,10 +8,10 @@ namespace InvestimentReport.Application.DTOs
     {
 
         [JsonProperty("capitalInvestido")]
-        public int InvestedCapital { get; set; }
+        public double InvestedCapital { get; set; }
 
         [JsonProperty("ValorAtual")]
-        public int CurrentValue { get; set; }
+        public double CurrentValue { get; set; }
 
         [JsonProperty("dataResgate")]
         public DateTime RedemptionDate { get; set; }
@@ -20,7 +20,7 @@ namespace InvestimentReport.Application.DTOs
         public DateTime PurchaseDate { get; set; }
 
         [JsonProperty("iof")]
-        public int IOF { get; set; }
+        public double IOF { get; set; }
 
         [JsonProperty("nome")]
         public string Name { get; set; }
@@ -29,7 +29,7 @@ namespace InvestimentReport.Application.DTOs
         public double TotalTaxes { get; set; }
 
         [JsonProperty("quantity")]
-        public int Quantity { get; set; }
+        public double Quantity { get; set; }
 
     }
 

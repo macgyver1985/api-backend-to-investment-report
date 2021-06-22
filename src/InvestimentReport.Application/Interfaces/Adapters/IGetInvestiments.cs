@@ -8,7 +8,7 @@ namespace InvestimentReport.Application.Interfaces.Adapters
     public interface IGetInvestiments : IDisposable
     {
 
-        Task<IList<T>> GetOf<T>();
+        Task<IList<T>> GetOf<T>(Guid processId);
 
     }
 
