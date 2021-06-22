@@ -8,5 +8,6 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 ENV ASPNETCORE_ENVIRONMENT=Development
 ENV REDIS_URL=redis:6379,password=*hWuJ@e>sv}LG)W6=^F]
 WORKDIR /wwwroot
+RUN mkdir logs
 COPY --from=build /api-investiment-report/publish .
-ENTRYPOINT [ "dotnet", "InvestimentReport.WebApi.dll" ]
+ENTRYPOINT [ "dotnet", "./InvestimentReport.WebApi.dll" ]

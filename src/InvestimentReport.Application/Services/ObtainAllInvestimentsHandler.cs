@@ -6,7 +6,7 @@ using InvestimentReport.Application.DTOs;
 using InvestimentReport.Application.Helper;
 using InvestimentReport.Application.Interfaces.Adapters;
 using InvestimentReport.Application.Interfaces.Services;
-using InvestimentReport.CrossCutting.Interfaces;
+using InvestimentReport.CrossCutting.Trace.Interfaces;
 using InvestimentReport.Domain.Enums;
 using InvestimentReport.Domain.Investiments;
 using Newtonsoft.Json;
@@ -231,11 +231,11 @@ namespace InvestimentReport.Application.Service
             catch (Exception ex)
             {
                 await this.loggerAdapter
-                    .Error<ObtainAllInvestimentsHandler>(
+                    .Error<ObtainAllInvestimentsHandler, List<Investiment>>(
                         processId,
                         $"Erro ao tentar registrar o cache {CACHE_KEY}.",
                         ex,
-                        payload
+                        list
                     );
             }
         }
