@@ -3,7 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using InvestimentReport.Application.Interfaces.Adapters;
+using InvestimentReport.Application.Interfaces.Services;
+using InvestimentReport.Application.Service;
+using InvestimentReport.CrossCutting.Trace;
+using InvestimentReport.CrossCutting.Trace.Interfaces;
 using InvestimentReport.Infrastructure.Cache;
+using InvestimentReport.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,7 +16,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace InvestimentReport.WebApi
 {
@@ -19,7 +23,7 @@ namespace InvestimentReport.WebApi
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -27,7 +31,10 @@ namespace InvestimentReport.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<ILogger, LoggerInFile>();
             services.AddSingleton<ICache, Redis>();
+            services.AddSingleton<IObtainAllInvestimentsHandler, ObtainAllInvestimentsHandler>();
+            services.AddSingleton<IGetInvestiments, GetInvestimentService>();
             services.AddControllers();
         }
 

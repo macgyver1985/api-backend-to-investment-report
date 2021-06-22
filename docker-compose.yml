@@ -20,6 +20,8 @@ services:
             context: .
         image: macgyver1985/api-backend-to-investiment-report
         container_name: api-investiment-report
+        volumes:
+            - D:/WORK_ME/api-backend-to-investment-report/logs:/wwwroot/logs
         ports:
             - "8080:80"
         networks:

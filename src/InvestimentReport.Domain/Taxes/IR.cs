@@ -19,8 +19,10 @@ namespace InvestimentReport.Domain.Taxes
             double profitability = investiment.InvestedValue - investiment.CurrentValue;
             double tempValue = 0D;
 
-            if (profitability > 0)
+            if (profitability < 0)
             {
+                profitability *= -1;
+
                 tempValue = (profitability * this.CalculationBasis) / 100;
                 tempValue = Math.Round(tempValue, 4);
             }

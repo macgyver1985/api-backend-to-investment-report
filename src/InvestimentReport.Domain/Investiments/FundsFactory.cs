@@ -16,7 +16,9 @@ namespace InvestimentReport.Domain.Investiments
             )
                 .AddTaxes(new IR(15))
                 .AddTaxes(new IOF())
-                .AddTaxes(new Administrative(data.AdministrativeTax));
+                .AddTaxes(new Administrative(data.AdministrativeTax))
+                .CalculateTaxes()
+                .CalculateRedemptionValue();
 
             return item;
         }

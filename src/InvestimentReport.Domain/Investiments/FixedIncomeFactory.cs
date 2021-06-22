@@ -17,7 +17,9 @@ namespace InvestimentReport.Domain.Investiments
             )
                 .AddTaxes(new IR(5))
                 .AddTaxes(new IOF())
-                .AddGuarantee(new FGV());
+                .AddGuarantee(new FGV())
+                .CalculateTaxes()
+                .CalculateRedemptionValue();
 
             return item;
         }

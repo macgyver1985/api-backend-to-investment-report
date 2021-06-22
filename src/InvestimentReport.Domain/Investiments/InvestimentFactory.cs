@@ -23,6 +23,16 @@ namespace InvestimentReport.Domain.Investiments
                     ETypeInvestiment.DirectTreasure, typeof(DirectTreasureFactory)
                 )
             );
+            listFactoryByType.Add(
+                new Tuple<ETypeInvestiment, Type>(
+                    ETypeInvestiment.FixedIncome, typeof(FixedIncomeFactory)
+                )
+            );
+            listFactoryByType.Add(
+                new Tuple<ETypeInvestiment, Type>(
+                    ETypeInvestiment.Funds, typeof(FundsFactory)
+                )
+            );
         }
 
         public static Investiment CreateInvestiment(ETypeInvestiment typeInvestiment, InvestimentData data)
