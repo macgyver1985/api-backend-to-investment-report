@@ -55,22 +55,21 @@ A rentabilidade é igual ao Valor Total menos Valor Investido
 
 - Usar agum tipo de cache como REDIS para melhorar a performance.
 - O cache só pode durar até as zero hora do dia seguinte.
-- Os dados devem ser trabalhados em memória não sendo permitido usar qualquer tipo de banco de dados.
-- Usar o source abaixo para obter os investmentos:
+- Usar os sources abaixo para obter os investmentos:
 	- http://www.mocky.io/v2/5e3428203000006b00d9632a
   - http://www.mocky.io/v2/5e3429a33000008c00d96336
   - http://www.mocky.io/v2/5e342ab33000008c00d96342
 - O metadados de resposta deve conter os campos abaixo:
 ```
 {
-  "valorTotal": 829.68,
-  "investmentos": [{
-    "nome": "Tesouro Selic 2025",
-    "valorInvestido": 799.4720,
-    "valorTotal": 829.68,
-    "vencimento": "2025-03-01T00:00:00",
-    "Ir": 3.0208,
-    "valorResgate": 705.228
+  valorTota": double,
+  investmentos: [{
+    nome: string,
+    valorInvestido: double,
+    valorTotal: double,
+    vencimento: string,
+    Ir: double,
+    valorResgate: double
   }]
 }
 ```
@@ -118,7 +117,7 @@ Visando atender de uma melhor forma os aspectos de "organização, manutenibilid
 
 ### Pastas X Clean Architecture
 
-Abaixo tabela que mostra a qual camada da arquitetura que cada pasta pertence:
+Abaixo tabela que mostra a qual camada da arquitetura cada pasta pertence:
 
 | Pasta | Camada |
 | ------ | ------ |
@@ -211,7 +210,7 @@ Toda solução de CI/CD foi desenvolvida pelo CircleCI.
 
 <img src="https://github.com/macgyver1985/api-backend-to-investment-report/blob/master/docs/ci_cd.png" alt="CI/CD" width="800">
 
-O fluxo da pipeline é composto pelos seguinte passos:
+O fluxo da pipeline é composto pelos seguintes passos:
 
 1. Clone do repositório.
 2. Execução dos testes unitários.
@@ -229,4 +228,4 @@ Visando a melhor qualidade das entregas foram feitas as seguintes configuraçõe
 
 # AMBIENTE PRODUTIVO
 
-O ambiente produtivo da aplicação encontra-se na Heroku e a url de acesso a api é https://investiment-report.herokuapp.com/InvestmentReport.
+O ambiente produtivo da aplicação encontra-se na Heroku e a url de acesso à api é https://investiment-report.herokuapp.com/InvestmentReport.
