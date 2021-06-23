@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
@@ -19,6 +20,9 @@ namespace InvestmentReport.WebApi.ViewModels
                 return this.Investments.Sum(t => t.CurrentValue);
             }
         }
+
+        [JsonProperty("processId")]
+        public Guid ProcessId { get; set; }
 
         [JsonProperty("investmentos")]
         public IList<InvestmentModel> Investments { get; private set; }
