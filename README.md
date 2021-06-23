@@ -13,6 +13,7 @@
     - [Detalhamento da Solução](#detalhamento-da-solução)
       - [Estrutura das Pastas](#estrutura-das-pastas)
       - [Pastas X Clean Architecture](#pastas-x-clean-architecture)
+      - [Metadados de Resposta](#metadados-de-resposta)
   - [AMBIENTE LOCAL](#ambiente-local)
     - [Pré-requisitos](#pré-requisitos)
     - [Repositório](#repositório)
@@ -62,7 +63,8 @@ A rentabilidade é igual ao Valor Total menos Valor Investido
 - O metadados de resposta deve conter os campos abaixo:
 ```
 {
-  valorTota": double,
+  processId: Guid
+  valorTota: double,
   investmentos: [{
     nome: string,
     valorInvestido: double,
@@ -127,6 +129,20 @@ Abaixo tabela que mostra a qual camada da arquitetura cada pasta pertence:
 | InvestmentReport.Infrastructure | Interface Adapters |
 | InvestmentReport.WebApi | Frameworks & Drivers |
 
+### Metadados de Resposta
+Abaixo tabela com os atributos do metadados e qual o dados que é apresentado em cada um:
+
+| Atributo | Descrição |
+| ------ | ------ |
+| processId | Identificação da requisição |
+| valorTota | Totalizador do valor total |
+| investmentos.nome | Nome do investimento |
+| investmentos.valorInvestido | Valor investido |
+| investmentos.valorTotal | Valor atual do investimento |
+| investmentos.vencimento | Data de vencimento |
+| investmentos.Ir | Valor atual do IR sobre o rendimento |
+| investmentos.valorResgate | Valor de resgate para o dia corrente |
+
 # AMBIENTE LOCAL
 
 ## Pré-requisitos
@@ -166,6 +182,7 @@ A publicação local irá subir dois containers, um com a api e outro com o redi
 $ docker-cmopose up -d --build
 ```
 > Será executada no endereço http://localhost:8080/InvestmentReport
+> Swagger: http://localhost:8080/swagger/index.html
 
 Para derrubar o ambiente local basta executar o comando abaixo:
 
@@ -190,6 +207,7 @@ Em seguida é só colocar o break point nos pontos que deseja debugar, veja exem
 <img src="https://github.com/macgyver1985/api-backend-to-investment-report/blob/master/docs/debug-passos-02.jpg" alt="Exemplo de debug" width="800">
 
 > Será executada no endereço http://localhost:5000/InvestmentReport, basta acessar pelo navegador.
+> Swagger: http://localhost:5000/swagger/index.html
 
 ## Execução dos Testes
 
@@ -228,4 +246,7 @@ Visando a melhor qualidade das entregas foram feitas as seguintes configuraçõe
 
 # AMBIENTE PRODUTIVO
 
-O ambiente produtivo da aplicação encontra-se na Heroku e a url de acesso à api é https://investiment-report.herokuapp.com/InvestmentReport.
+O ambiente produtivo da aplicação encontra-se na Heroku, abaixo as urls de acesso:
+
+- Acesso direto: https://investiment-report.herokuapp.com/InvestmentReport
+- Swagger: https://investiment-report.herokuapp.com/swagger/index.html
