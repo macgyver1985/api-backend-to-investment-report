@@ -13,7 +13,7 @@
     - [Detalhamento da Solução](#detalhamento-da-solução)
       - [Estrutura das Pastas](#estrutura-das-pastas)
       - [Pastas X Clean Architecture](#pastas-x-clean-architecture)
-  - [AMBIENTES LOCAL](#ambientes-local)
+  - [AMBIENTE LOCAL](#ambiente-local)
     - [Pré-requisitos](#pré-requisitos)
     - [Repositório](#repositório)
     - [Dependencias](#dependencias)
@@ -22,7 +22,7 @@
     - [Iniciando com Debug](#iniciando-com-debug)
     - [Execução dos Testes](#execução-dos-testes)
   - [LOGS](#logs)
-  - [CI/CD](#ci/cd)
+  - [CI/CD](#cicd)
   - [AMBIENTE PRODUTIVO](#ambiente-produtivo)
 
 # INTRODUÇÃO
