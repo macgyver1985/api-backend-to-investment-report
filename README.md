@@ -170,3 +170,25 @@ Em seguida é só colocar o break point nos pontos que deseja debugar, veja exem
 ```bash
 $ dotnet test ./src/
 ```
+
+# CI/CD
+
+Toda solução de CI/CD foi desenvolvida pelo CircleCI.
+
+<img src="https://github.com/macgyver1985/api-backend-to-investment-report/blob/master/docs/ci_cd.png" alt="CI/CD" width="800">
+
+O fluxo da pipeline é composto pelos seguinte passos:
+
+1. Clone do repositório.
+2. Execução dos testes unitários.
+3. Deploy da aplicação junto a Heroku.
+
+> Para mais detalhes veja em ./.circleci/config.yml
+
+Visando a melhor qualidade das entregas foram feitas as seguintes configurações:
+
+- O passo de testes da pipeline é executado para qualquer branch da aplicação após um push;
+- A branch master é protegida para receber push;
+- Qualquer PR que é aberta para master exige que os testes da branch de origem tenham ocorrido com sucesso
+<img src="https://github.com/macgyver1985/api-backend-to-investment-report/blob/master/docs/pr.jpg" alt="Pull Request" width="800">
+
