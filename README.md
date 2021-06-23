@@ -68,13 +68,14 @@ A rentabilidade é igual ao Valor Total menos Valor Investido
 - Design Patterns GoF.
 - REDIS para cache.
 - Docker.
+- Docker-Compose.
 - CI/CD com CircleCI.
 - Cloud Heroku.
 
 ## Técnologias
 
 - Liguagem de programação c#.
-- ASP Net Core 3.1.
+- Asp Net Core 3.1.
 - xUnit para testes e relatório de cobertura.
 
 ## Detalhamento da Solução
@@ -104,196 +105,68 @@ Abaixo tabela que mostra a qual camada da arquitetura que cada pasta pertence:
 
 Para que a aplicação seja executada corretamente deve ser instalado os recursos abaixo:
 
-- ASP Net Core 3.1
+- Asp Net Core 3.1
 - Docker
+- Docker-Compose
 
 ## Ambiente de Desenvolvimento
 
 ### Repositório
+
 ```bash
 $ git clone https://github.com/macgyver1985/api-backend-to-investiment-report.git
 $ cd api-backend-to-investiment-report
 ```
 
-#### Dependencias
+### Dependencias
+
+O build dot Asp Net Core 3.1 já restaura as dependencias, mas segue o comando que só restaura as dependencias:
 
 ```bash
-$ cd src
-$ dotnet restore
+$ dotnet restore ./src/InvestimentReport.sln
 ```
 
-#### Transpilando
-
-Este comando irá converter o código de **typescript** para **javascript** e salvar na pasta **dist**.
+### Compilando Aplicação
  
 ```bash
-$ npm run build
+$ dotnet build ./src/
 ```
 
-#### Iniciando sem Debug
+### Publicação Localmente
+
+A publicação local irá subir dois containers, um com a api e outro com o redis, veja abaixo:
 
 ```bash
-$ npm start
+$ docker-cmopose up -d --build
 ```
+> Será executada no endereço http://localhost:8080/InvestimentReport
 
-> Será executada no endereço http://localhost:3333/graphql
-
-#### Iniciando com Debug
-
-Basta abrir a pasta "api-backend-to-rental-estate" pelo Visual Studio Code e executar o comando abaixo no terminal:
+Para derrubar o ambiente local basta executar o comando abaixo:
 
 ```bash
-$ npm run dev
+$ docker-cmopose down
 ```
-> Será executada no endereço http://localhost:3333/graphql
+
+### Iniciando com Debug
+
+Para iniciar o debug é necessário que a aplicação esteja publicada localmente por causa do redis. Para publicar veja o tópico anterior.
+
+No Visual Studios Code, abra a aplicação a partir da pasta raiz "api-backend-to-investiment-report" e siga os passos abaixo:
+
+- Selecione a opção Debug conforme passo 1.
+- Escolha o perfil de execução conforme passo 2.
+- Aperte no play conforme passo 3 ou a tecla F5 do teclado.
+
+<img src="https://github.com/macgyver1985/api-backend-to-investiment-report/blob/master/docs/debug-passos.jpg" alt="Exemplo de debug" width="800">
 
 Em seguida é só colocar o break point nos pontos que deseja debugar, veja exemplo abaixo:
 
-<img src="https://github.com/macgyver1985/api-backend-to-rental-estate/blob/master/docs/debug-example.jpg" alt="Exemplo de debug" width="800">
+<img src="https://github.com/macgyver1985/api-backend-to-investiment-report/blob/master/docs/debug-passos-02.jpg" alt="Exemplo de debug" width="800">
+
+> Será executada no endereço http://localhost:5000/InvestimentReport, basta acessar pelo navegador.
 
 #### Execução dos Testes
 
-Este comando irá executar os teste e disponibulizar o relatório de cobertura na pasta **coverage**.
-
 ```bash
-$ npm test
+$ dotnet test ./src/
 ```
-
-## Publicando em Docker
-
-A aplicação está preparada para ser executada em container.
-
-Caso o ***npm run publish*** já tenha sido executado, execute os comandos abaixo:
-
-```bash
-$ docker stop -t 0 macgyver_application
-$ docker rm macgyver_application
-$ docker rmi macgyver1985/imoveis
-```
-
-Para publicar no container execute o comando abaixo:
-
-```bash
-$ npm run publish
-```
-
-> Será executada no endereço http://localhost:3333/graphql
-
-Caso queria subir a imagem da aplicação manualmente execute os comandos abaixo:
-
-```bash
-$ npm run build
-$ docker build -f Dockerfile -t macgyver1985/imoveis .
-$ docker run -d -e NODE_ENV=production -p 3333:3333 macgyver1985/imoveis
-```
-
-> Será executada no endereço http://localhost:3333/graphql
-
-# Executando Aplicação
-
-As opções descritas abaixo servem para instânicas da aplicação em ambiente local ou container.
-
-### Usuários
-
-Foram configurados dois usuários, onde uma está atralado ao Portal Imóveis .COM e o outro ao Pronto pra Morar.
-Para ter acesso aos imóveis disponíveis a cada portal basta gerar o token JWT com os respectivos usuários.
-
-###### Pronto pra Morar
-
-- Username: **prontopramoraruser**
-- Password: **prontopramorarpwd**
-
-###### Imóveis .COM
-
-- Username: **imoveiscomuser**
-- Password: **imoveiscompwd**
-
-### Apollo Playground
-
-Excelente forma de efetuar requisições à API pois já fornece toda a documentação dos "SCHEMAS" e ajuda muito na construção das chamadas do tipo "Mutation ou Query".
-
-<img src="https://github.com/macgyver1985/api-backend-to-rental-estate/blob/master/docs/apollo-playground-example.jpg" alt="Apollo Playground" width="800">
-
-##### Obter Token JWT
-
-- Acesso a url http://localhost:3333/graphql
-- Execute a mutation GetAuthorization
-
-```
-mutation{
-  GetAuthorization (
-    command: {
-      userName: "imoveiscomuser"
-      password: "imoveiscompwd"
-    }
-  ) {
-    authorization,
-    expiresIn
-  }
-}
-```
-
-<img src="https://github.com/macgyver1985/api-backend-to-rental-estate/blob/master/docs/get-token-example.jpg" alt="Exemplo de Token JWT" width="800">
-
-##### Obter Lista de Imoveis
-
-- Acesso a url http://localhost:3333/graphql
-- Execute a query obtainRealEstate informando quais campos deseja receber
-
-```
-query {
-  obtainRealEstate(
-    command:{
-      pageNumber: 1,
-      pageSize: 10
-    }) {
-    pageNumber
-    pageSize
-    totalPages
-    totalCount
-    listings {
-      id
-      usableAreas
-      bathrooms
-      bedrooms
-      createdAt
-      updatedAt
-      listingType
-      listingStatus
-      parkingSpaces
-      owner
-      images
-      address {
-        city
-        neighborhood
-        geoLocation{
-          precision
-          location{
-            lon
-            lat
-          }
-        }
-      }
-      pricingInfos {
-        businessType
-        price
-        period
-        yearlyIptu
-        monthlyCondoFee
-        rentalTotalPrice
-      }
-    }
-  }
-}
-```
-
-- Configura o token em HTTP HEADERS incluindo o parâmetro "authorization"
-
-```
-{
-  "authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbXMiOiJ7XCJ1c2VyTmFtZVwiOlwidml2YXJlYWx1c2VyXCIsXCJ1c2VySWRcIjpcIjI3OTQ5OGM5LTFmYTctNDY5Zi1iNmQ2LWIyYjYwMDY1NDI1NlwifSIsImNyZWF0ZWREYXRlIjoiMjAyMS0wNS0xOFQwNTowNDo0NS42ODRaIiwiZXhwaXJlc0RhdGUiOiIyMDIxLTA1LTE4VDA2OjA0OjQ1LjY4NFoiLCJleHBpcmVzSW4iOjM2MDAwMDAsImlkZW50aXR5IjoiMTQyY2UxZGQtNjRkYS00MGFiLTk0NTgtMGMzZjg4YTVmYTZhIiwiaWF0IjoxNjIxMzE0Mjg1LCJleHAiOjE2MjEzMTc4ODV9.-G_ShzMbwYN5kZgJWoDdc92kIxXuvmJ2ajf93D479QU"
-}
-```
-
-<img src="https://github.com/macgyver1985/api-backend-to-rental-estate/blob/master/docs/obtain-real-etates-example.jpg" alt="Exemplo de Obter Imoveis" width="800">
-
