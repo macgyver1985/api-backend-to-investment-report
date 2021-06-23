@@ -13,12 +13,20 @@ using InvestmentReport.Domain.Investments;
 namespace InvestmentReport.Application.Service
 {
 
+    /// <summary>
+    /// Serviço de dominio que devolve a lista de investimento do cliente.
+    /// </summary>
     public sealed class ObtainAllInvestmentsHandler : HandlerHelper, IObtainAllInvestmentsHandler
     {
 
         private readonly ILogger loggerAdapter;
         private readonly IGetInvestments getInvestmentsAdapter;
 
+        /// <summary>
+        /// Construtor padrão.
+        /// </summary>
+        /// <param name="loggerAdapter">Recebe a implementação concreta do ILogger.</param>
+        /// <param name="getInvestmentsAdapter">Recebe a implementação concreta do IGetInvestments.</param>
         public ObtainAllInvestmentsHandler(
             ILogger loggerAdapter,
             IGetInvestments getInvestmentsAdapter
@@ -48,10 +56,23 @@ namespace InvestmentReport.Application.Service
             disposed = true;
         }
 
+        /// <summary>
+        /// Método auxiliar para chamar o IGetInvestments.
+        /// </summary>
+        /// <typeparam name="T">Tipos do DTO que será buscado.</typeparam>
+        /// <param name="processId">Identificação do processamento.</param>
+        /// <returns>Retorna uma lista de T.</returns>
         private async Task<IList<T>> GetInvestment<T>(Guid processId)
         {
             try
             {
+                await this.loggerAdapter
+                    .Debug<ObtainAllInvestmentsHandler, string>(
+                        processId,
+                        $"Iniciando integração com IGetInvestments",
+                        typeof(T).Name
+                    );
+
                 var list = await this.getInvestmentsAdapter.GetOf<T>(processId);
 
                 return list;
@@ -69,10 +90,22 @@ namespace InvestmentReport.Application.Service
             return null;
         }
 
+        /// <summary>
+        /// Método que devolve a lista consolidade dos investimentos do cliente.
+        /// </summary>
+        /// <param name="processId">Identificação do processo.</param>
+        /// <returns>Retorna lista de Investment.</returns>
         public async Task<IList<Investment>> Execute(Guid processId)
         {
             if (processId == Guid.Empty)
                 throw new ArgumentException("processId is empty.");
+
+            await this.loggerAdapter
+                .Debug<ObtainAllInvestmentsHandler, string>(
+                    processId,
+                    $"Iniciando execução do serviço de dominio {nameof(ObtainAllInvestmentsHandler)}",
+                    null
+                );
 
             List<Investment> result = new List<Investment>();
 
@@ -135,6 +168,13 @@ namespace InvestmentReport.Application.Service
 
                         result.Add(item);
                     });
+
+            await this.loggerAdapter
+                .Debug<ObtainAllInvestmentsHandler, string>(
+                    processId,
+                    $"Execução de ${nameof(ObtainAllInvestmentsHandler)} finalizada.",
+                    null
+                );
 
             if (!result.Any())
                 return null;

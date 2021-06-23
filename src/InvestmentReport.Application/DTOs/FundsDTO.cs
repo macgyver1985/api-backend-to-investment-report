@@ -4,6 +4,10 @@ using Newtonsoft.Json;
 namespace InvestmentReport.Application.DTOs
 {
 
+    /// <summary>
+    /// DTO usado para transferir os dados do serviços que devolve investimentos
+    /// do tipos fundos para a camada de application.
+    /// </summary>
     public class FundsDTO
     {
 
