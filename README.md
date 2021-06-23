@@ -183,6 +183,7 @@ $ docker-cmopose up -d --build
 ```
 > Será executada no endereço http://localhost:8080/InvestmentReport
 > Swagger: http://localhost:8080/swagger/index.html
+> HealthChecks: http://localhost:8080/hc
 
 Para derrubar o ambiente local basta executar o comando abaixo:
 
@@ -208,6 +209,7 @@ Em seguida é só colocar o break point nos pontos que deseja debugar, veja exem
 
 > Será executada no endereço http://localhost:5000/InvestmentReport, basta acessar pelo navegador.
 > Swagger: http://localhost:5000/swagger/index.html
+> HealthChecks: http://localhost:5000/hc
 
 ## Execução dos Testes
 
@@ -250,3 +252,4 @@ O ambiente produtivo da aplicação encontra-se na Heroku, abaixo as urls de ace
 
 - Acesso direto: https://investiment-report.herokuapp.com/InvestmentReport
 - Swagger: https://investiment-report.herokuapp.com/swagger/index.html
+- HealthChecks: https://investiment-report.herokuapp.com/hc

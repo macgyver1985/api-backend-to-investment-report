@@ -11,12 +11,14 @@ using InvestmentReport.CrossCutting.Trace;
 using InvestmentReport.CrossCutting.Trace.Interfaces;
 using InvestmentReport.Infrastructure.Cache;
 using InvestmentReport.Infrastructure.Services;
+using InvestmentReport.WebApi.HealthCheck;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
@@ -39,6 +41,14 @@ namespace InvestmentReport.WebApi
             services.AddSingleton<IObtainAllInvestmentsHandler, ObtainAllInvestmentsHandler>();
             services.AddSingleton<IGetInvestments, GetInvestmentService>();
             services.AddControllers();
+
+            services.AddHealthChecks()
+                .AddCheck(
+                    "Cache-check",
+                    new CacheHealthCheck(new Redis(this.Configuration)),
+                    HealthStatus.Unhealthy,
+                    new string[] { "cache" }
+                );
 
             services.AddSwaggerGen(c =>
             {
@@ -93,6 +103,7 @@ namespace InvestmentReport.WebApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/hc");
             });
         }
     }
