@@ -11,7 +11,7 @@ namespace InvestimentReport.Domain.Investiments
         public Investiment CreateInvestiment(InvestimentData data)
         {
             var item = new Investiment(
-                ETypeInvestiment.FixedIncome,
+                ETypeInvestiment.Funds,
                 data
             )
                 .AddTaxes(new IR(15))
@@ -20,7 +20,7 @@ namespace InvestimentReport.Domain.Investiments
                 .CalculateTaxes()
                 .CalculateRedemptionValue();
 
-            return item;
+            return item as Investiment;
         }
 
     }

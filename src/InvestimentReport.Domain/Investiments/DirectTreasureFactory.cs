@@ -19,7 +19,7 @@ namespace InvestimentReport.Domain.Investiments
                 .CalculateTaxes()
                 .CalculateRedemptionValue();
 
-            return item;
+            return item as Investiment;
         }
 
     }

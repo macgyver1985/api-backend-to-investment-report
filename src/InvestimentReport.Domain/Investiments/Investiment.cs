@@ -2,23 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using InvestimentReport.Domain.Enums;
-using InvestimentReport.Domain.Helpers;
 using InvestimentReport.Domain.Interfaces;
 
 namespace InvestimentReport.Domain.Investiments
 {
 
-    public class Investiment
+    public sealed class Investiment : IInvestiment
     {
 
         #region Variables
 
-        private readonly List<Tax> taxes = null;
-        private readonly List<IGuarantee> guaranteeList = null;
+        private readonly List<ITax> taxes;
+        private readonly List<IGuarantee> guaranteeList;
         private bool isCalculatedTaxes = false;
         private bool isCalculatedRedemptionValue = false;
         private readonly TimeSpan halfOfTheTime;
         private readonly TimeSpan missingThreeMonths;
+        private readonly TimeSpan shorterTime;
 
         #endregion
 
@@ -58,7 +58,7 @@ namespace InvestimentReport.Domain.Investiments
             }
         }
 
-        public IReadOnlyList<Tax> Taxes
+        public IReadOnlyList<ITax> Taxes
         {
             get
             {
@@ -80,7 +80,7 @@ namespace InvestimentReport.Domain.Investiments
 
         internal Investiment(ETypeInvestiment typeInvestiment, InvestimentData data)
         {
-            this.taxes = new List<Tax>();
+            this.taxes = new List<ITax>();
             this.guaranteeList = new List<IGuarantee>();
 
             this.Type = typeInvestiment;
@@ -95,14 +95,15 @@ namespace InvestimentReport.Domain.Investiments
 
             this.TotalTime = this.DueDate.Subtract(this.PurchaseDate);
             this.halfOfTheTime = this.TotalTime / 2;
-            this.missingThreeMonths = this.DueDate.AddMonths(-3).Subtract(this.PurchaseDate);
+            this.missingThreeMonths = TimeSpan.FromTicks(DateTime.MinValue.AddMonths(3).Ticks);
+            this.shorterTime = TimeSpan.Zero;
         }
 
         #endregion
 
         #region Methods
 
-        public Investiment CalculateRedemptionValue()
+        public IInvestiment CalculateRedemptionValue()
         {
             if (!this.isCalculatedTaxes)
                 this.CalculateTaxes();
@@ -112,9 +113,9 @@ namespace InvestimentReport.Domain.Investiments
 
             if (timeLeft > this.missingThreeMonths && timeLeft <= this.halfOfTheTime)
                 lossPercentage = 15D;
-            else if (timeLeft > TimeSpan.MinValue && timeLeft <= this.missingThreeMonths)
+            else if (timeLeft > this.shorterTime && timeLeft <= this.missingThreeMonths)
                 lossPercentage = 6D;
-            else if (timeLeft <= TimeSpan.MinValue)
+            else if (timeLeft <= this.shorterTime)
                 lossPercentage = 0D;
 
             double lossValue = (this.InvestedValue * lossPercentage) / 100;
@@ -127,7 +128,7 @@ namespace InvestimentReport.Domain.Investiments
             return this;
         }
 
-        public Investiment CalculateTaxes()
+        public IInvestiment CalculateTaxes()
         {
             this.taxes.ForEach(t => t.Calculate(this));
 
@@ -137,7 +138,7 @@ namespace InvestimentReport.Domain.Investiments
             return this;
         }
 
-        public Investiment AddTaxes(Tax tax)
+        public IInvestiment AddTaxes(ITax tax)
         {
             if (this.taxes.FirstOrDefault(t => t.Name == tax.Name) != null)
                 return this;
@@ -153,7 +154,7 @@ namespace InvestimentReport.Domain.Investiments
             return this;
         }
 
-        public Investiment AddGuarantee(IGuarantee guarantee)
+        public IInvestiment AddGuarantee(IGuarantee guarantee)
         {
             if (this.guaranteeList.FirstOrDefault(t => t.Name == guarantee.Name) != null)
                 return this;

@@ -1,6 +1,6 @@
 using System;
 using InvestimentReport.Domain.Helpers;
-using InvestimentReport.Domain.Investiments;
+using InvestimentReport.Domain.Interfaces;
 
 namespace InvestimentReport.Domain.Taxes
 {
@@ -14,7 +14,7 @@ namespace InvestimentReport.Domain.Taxes
             this.CalculationBasis = calculationBasis;
         }
 
-        public override void Calculate(Investiment investiment)
+        public override ITax Calculate(IInvestiment investiment)
         {
             double profitability = investiment.InvestedValue - investiment.CurrentValue;
             double tempValue = 0D;
@@ -29,6 +29,8 @@ namespace InvestimentReport.Domain.Taxes
 
             this.Value = tempValue;
             this.IsCalculated = true;
+
+            return this;
         }
     }
 

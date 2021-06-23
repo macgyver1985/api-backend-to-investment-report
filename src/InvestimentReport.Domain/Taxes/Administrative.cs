@@ -1,5 +1,5 @@
 using InvestimentReport.Domain.Helpers;
-using InvestimentReport.Domain.Investiments;
+using InvestimentReport.Domain.Interfaces;
 
 namespace InvestimentReport.Domain.Taxes
 {
@@ -13,10 +13,12 @@ namespace InvestimentReport.Domain.Taxes
             this.CalculationBasis = calculationBasis;
         }
 
-        public override void Calculate(Investiment investiment)
+        public override ITax Calculate(IInvestiment investiment)
         {
             this.Value = this.CalculationBasis;
             this.IsCalculated = true;
+
+            return this;
         }
     }
 
