@@ -4,14 +4,14 @@ jobs:
   test:
     docker:
       - image: mcr.microsoft.com/dotnet/core/sdk:3.1
-    working_directory: /api-investiment-report
+    working_directory: /api-investment-report
     steps:
       - checkout
       - run:
           name: Execute Test Application
           command: dotnet test ./src -v n --results-directory:coverage --collect:"XPlat Code Coverage"
       - store_test_results:
-          path: /api-investiment-report/coverage
+          path: /api-investment-report/coverage
   deploy:
     machine: true
     steps:

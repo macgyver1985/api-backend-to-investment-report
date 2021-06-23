@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/src/InvestimentReport.Tests/InvestimentReport.Tests.csproj",
+                "${workspaceFolder}/src/InvestmentReport.Tests/InvestmentReport.Tests.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/src/InvestimentReport.WebApi/InvestimentReport.WebApi.csproj",
+                "${workspaceFolder}/src/InvestmentReport.WebApi/InvestmentReport.WebApi.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -31,7 +31,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/src/InvestimentReport.WebApi/InvestimentReport.WebApi.csproj",
+                "${workspaceFolder}/src/InvestmentReport.WebApi/InvestmentReport.WebApi.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -44,7 +44,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/src/InvestimentReport.WebApi/InvestimentReport.WebApi.csproj",
+                "${workspaceFolder}/src/InvestmentReport.WebApi/InvestmentReport.WebApi.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],

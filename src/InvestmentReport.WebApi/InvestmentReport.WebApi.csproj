@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\InvestmentReport.Application\InvestmentReport.Application.csproj" />
+    <ProjectReference Include="..\InvestmentReport.Domain\InvestmentReport.Domain.csproj" />
+    <ProjectReference Include="..\InvestmentReport.Infrastructure\InvestmentReport.Infrastructure.csproj" />
+    <ProjectReference Include="..\InvestmentReport.CrossCutting\InvestmentReport.CrossCutting.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+
+</Project>
