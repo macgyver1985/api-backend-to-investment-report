@@ -6,9 +6,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "test",
-            "program": "${workspaceFolder}/src/InvestimentReport.Tests/bin/Debug/netcoreapp3.1/InvestimentReport.Tests.dll",
+            "program": "${workspaceFolder}/src/InvestmentReport.Tests/bin/Debug/netcoreapp3.1/InvestmentReport.Tests.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/InvestimentReport.Tests",
+            "cwd": "${workspaceFolder}/src/InvestmentReport.Tests",
             "console": "internalConsole",
             "stopAtEntry": false
         },
@@ -17,9 +17,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/InvestimentReport.WebApi/bin/Debug/netcoreapp3.1/InvestimentReport.WebApi.dll",
+            "program": "${workspaceFolder}/src/InvestmentReport.WebApi/bin/Debug/netcoreapp3.1/InvestmentReport.WebApi.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/InvestimentReport.WebApi",
+            "cwd": "${workspaceFolder}/src/InvestmentReport.WebApi",
             "console": "internalConsole",
             "stopAtEntry": false
         },

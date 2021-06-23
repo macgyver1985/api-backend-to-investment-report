@@ -18,8 +18,8 @@ services:
         build: 
             dockerfile: Dockerfile.local
             context: .
-        image: macgyver1985/api-backend-to-investiment-report
-        container_name: api-investiment-report
+        image: macgyver1985/api-backend-to-investment-report
+        container_name: api-investment-report
         volumes:
             - D:/WORK_ME/api-backend-to-investment-report/logs:/wwwroot/logs
         ports:
