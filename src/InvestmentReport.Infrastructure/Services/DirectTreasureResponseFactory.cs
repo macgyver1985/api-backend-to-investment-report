@@ -7,6 +7,9 @@ using Newtonsoft.Json.Linq;
 namespace InvestmentReport.Infrastructure.Services
 {
 
+    /// <summary>
+    /// teste
+    /// </summary>
     internal class DirectTreasureResponseFactory : ITypeServiceResponseFactory
     {
 
