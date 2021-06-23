@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using InvestmentReport.Application.Interfaces.Services;
 using InvestmentReport.CrossCutting.Trace.Interfaces;
 using InvestmentReport.WebApi.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace InvestmentReport.WebApi.Controllers
 {
@@ -16,6 +16,7 @@ namespace InvestmentReport.WebApi.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
+    [Produces("application/json")]
     public class InvestmentReportController : ControllerBase
     {
 
@@ -38,7 +39,7 @@ namespace InvestmentReport.WebApi.Controllers
         /// <response code="200">Retorna a lista dos investimentos consolidados.</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<OkObjectResult> Get()
+        public async Task<IActionResult> Get()
         {
             var processId = Guid.NewGuid();
 
@@ -56,18 +57,22 @@ namespace InvestmentReport.WebApi.Controllers
                 {
                     var item = new InvestmentModel()
                     {
-                        CurrentValue = t.CurrentValue,
-                        DueDate = t.DueDate,
-                        InvestedValue = t.InvestedValue,
-                        Name = t.Name,
-                        RedemptionValue = t.RedemptionValue,
-                        IrTax = t.Taxes.FirstOrDefault(tax => tax.Name == "IR").Value
+                        ValorTotal = t.CurrentValue,
+                        Vencimento = t.DueDate,
+                        ValorInvestido = t.InvestedValue,
+                        Nome = t.Name,
+                        ValorResgate = t.RedemptionValue,
+                        Ir = t.Taxes.FirstOrDefault(tax => tax.Name == "IR").Value
                     };
 
-                    result.Investments.Add(item);
+                    result.Investmentos.Add(item);
                 });
 
-                return Ok(JsonConvert.SerializeObject(result, Formatting.Indented));
+                return new JsonResult(result, new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                });
             }
 
             return null;

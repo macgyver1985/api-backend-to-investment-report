@@ -1,5 +1,4 @@
 using System;
-using Newtonsoft.Json;
 
 namespace InvestmentReport.WebApi.ViewModels
 {
@@ -7,23 +6,17 @@ namespace InvestmentReport.WebApi.ViewModels
     public class InvestmentModel
     {
 
-        [JsonProperty("nome")]
-        public string Name { get; set; }
+        public string Nome { get; set; }
 
-        [JsonProperty("valorInvestido")]
-        public double InvestedValue { get; set; }
+        public double ValorInvestido { get; set; }
 
-        [JsonProperty("valorTotal")]
-        public double CurrentValue { get; set; }
+        public double ValorTotal { get; set; }
 
-        [JsonProperty("vencimento")]
-        public DateTime DueDate { get; set; }
+        public DateTime Vencimento { get; set; }
 
-        [JsonProperty("Ir")]
-        public double IrTax { get; set; }
+        public double Ir { get; set; }
 
-        [JsonProperty("valorResgate")]
-        public double RedemptionValue { get; set; }
+        public double ValorResgate { get; set; }
 
     }
 

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 
 namespace InvestmentReport.WebApi.ViewModels
 {
@@ -9,27 +8,24 @@ namespace InvestmentReport.WebApi.ViewModels
     public class ListInvestmentsModel
     {
 
-        [JsonProperty("valorTotal")]
-        public double TotalValue
+        public double ValorTotal
         {
             get
             {
-                if (!this.Investments.Any())
+                if (!this.Investmentos.Any())
                     return 0D;
 
-                return this.Investments.Sum(t => t.CurrentValue);
+                return this.Investmentos.Sum(t => t.ValorTotal);
             }
         }
 
-        [JsonProperty("processId")]
         public Guid ProcessId { get; set; }
 
-        [JsonProperty("investmentos")]
-        public IList<InvestmentModel> Investments { get; private set; }
+        public IList<InvestmentModel> Investmentos { get; private set; }
 
         public ListInvestmentsModel()
         {
-            this.Investments = new List<InvestmentModel>();
+            this.Investmentos = new List<InvestmentModel>();
         }
 
     }
