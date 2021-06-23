@@ -104,8 +104,16 @@ Visando atender de uma melhor forma os aspectos de "organização, manutenibilid
 ### Estrutura das Pastas
 
 ```
-	├── src                    	# Código Fonte
-	|── InvestmentReport.CrossCutting		# Recursos que são usados por todas as camadas da aplicação
+├── .circleci				# Configurações de CI/CD
+├── .vscode				# Perfil de execução e task de compilação para o Visual Studio Code
+├── docs				# Documentos da aplicação
+├── src					# Código Fonte
+   └── InvestmentReport.CrossCutting	# Recursos que são usados por todas as camadas da aplicação
+   |── InvestmentReport.Domain		# Cor da aplicação, contém as entidade e toda regra de negócio
+   |── InvestmentReport.Application	# Contem os serviços de dominio e as interfaces de adapter
+   |── InvestmentReport.Infrastructure	# Implementa os adapters fornecidos pela application
+   |── InvestmentReport.WebApi		# Camada de apresentação e é onde é feito o DI/IoC
+   └── InvestmentReport.Tests		# Contem os teste unitários
 ```
 
 ### Pastas X Clean Architecture
@@ -115,6 +123,10 @@ Abaixo tabela que mostra a qual camada da arquitetura que cada pasta pertence:
 | Pasta | Camada |
 | ------ | ------ |
 | InvestmentReport.CrossCutting | Transversal |
+| InvestmentReport.Domain | Enterprise Business Rule |
+| InvestmentReport.Application | Application Business Rule |
+| InvestmentReport.Infrastructure | Interface Adapters |
+| InvestmentReport.WebApi | Frameworks & Drivers |
 
 # AMBIENTE LOCAL
 
