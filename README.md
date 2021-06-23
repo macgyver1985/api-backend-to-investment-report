@@ -2,13 +2,28 @@
 
 # Indice
 
-  - [Introdução](#introdução)
-  - [Requisitos Funcionais](#requisitos-funcionais)
-  - [Requisitos Não Funcionais](#requisitos-não-funcionais)
-  - [Propósta Técnica](#propósta-técnica)
-  - [Detalhamento da Solução](#detalhamento-da-solução)
-  - [Configurando Ambientes](#configurando-ambientes)
-  - [Executando Aplicação](#executando-aplicação)
+  - [INTRODUÇÃO](#introdução)
+  - [REQUISITOS FUNCIONAIS](#requisitos-funcionais)
+    - [Regras para Calculo do IR](#regras-para-calculo-do-ir)
+    - [Regras para Calculo do Resgate Antecipado](#regras-para-calculo-do-resgate-antecipado)
+  - [REQUISITOS NÃO FUNCIONAIS](#requisitos-não-funcionais)
+  - [PROPÓSTA TÉCNICA](#propósta-técnica)
+    - [Arquitetura](#arquitetura)
+    - [Técnologias](#técnologias)
+    - [Detalhamento da Solução](#detalhamento-da-solução)
+      - [Estrutura das Pastas](#estrutura-das-pastas)
+      - [Pastas X Clean Architecture](#pastas-x-clean-architecture)
+  - [AMBIENTE LOCAL](#ambiente-local)
+    - [Pré-requisitos](#pré-requisitos)
+    - [Repositório](#repositório)
+    - [Dependencias](#dependencias)
+    - [Compilando Aplicação](#compilando-aplicação)
+    - [Docker-Compose](#docker-compose)
+    - [Iniciando com Debug](#iniciando-com-debug)
+    - [Execução dos Testes](#execução-dos-testes)
+  - [LOGS](#logs)
+  - [CI/CD](#cicd)
+  - [AMBIENTE PRODUTIVO](#ambiente-produtivo)
 
 # INTRODUÇÃO
 
@@ -33,6 +48,8 @@ A rentabilidade é igual ao Valor Total menos Valor Investido
 1. Investmento com mais da metade do tempo em custódia: Perde 15% do valor investido.
 1. Investmento com até 3 meses para vencer: Perde 6% do valor investido.
 1. Outros: Perde 30% do valor investido.
+
+> Também foi subtraído do ''valor de resgate'' o ''valor do IR'' e eventuais ''outras taxas'' vinculadas ao investimento.
 
 # REQUISITOS NÃO FUNCIONAIS
 
@@ -87,8 +104,16 @@ Visando atender de uma melhor forma os aspectos de "organização, manutenibilid
 ### Estrutura das Pastas
 
 ```
-	├── src                    	# Código Fonte
-	|── InvestmentReport.CrossCutting		# Recursos que são usados por todas as camadas da aplicação
+├── .circleci				# Configurações de CI/CD
+├── .vscode				# Perfil de execução e task de compilação para o Visual Studio Code
+├── docs				# Documentos da aplicação
+├── src					# Código Fonte
+   └── InvestmentReport.CrossCutting	# Recursos que são usados por todas as camadas da aplicação
+   |── InvestmentReport.Domain		# Cor da aplicação, contém as entidade e toda regra de negócio
+   |── InvestmentReport.Application	# Contem os serviços de dominio e as interfaces de adapter
+   |── InvestmentReport.Infrastructure	# Implementa os adapters fornecidos pela application
+   |── InvestmentReport.WebApi		# Camada de apresentação e é onde é feito o DI/IoC
+   └── InvestmentReport.Tests		# Contem os teste unitários
 ```
 
 ### Pastas X Clean Architecture
@@ -98,8 +123,12 @@ Abaixo tabela que mostra a qual camada da arquitetura que cada pasta pertence:
 | Pasta | Camada |
 | ------ | ------ |
 | InvestmentReport.CrossCutting | Transversal |
+| InvestmentReport.Domain | Enterprise Business Rule |
+| InvestmentReport.Application | Application Business Rule |
+| InvestmentReport.Infrastructure | Interface Adapters |
+| InvestmentReport.WebApi | Frameworks & Drivers |
 
-# CONFIGURANDO AMBIENTES
+# AMBIENTE LOCAL
 
 ## Pré-requisitos
 
@@ -109,16 +138,14 @@ Para que a aplicação seja executada corretamente deve ser instalado os recurso
 - Docker
 - Docker-Compose
 
-## Ambiente de Desenvolvimento
-
-### Repositório
+## Repositório
 
 ```bash
 $ git clone https://github.com/macgyver1985/api-backend-to-investment-report.git
 $ cd api-backend-to-investment-report
 ```
 
-### Dependencias
+## Dependencias
 
 O build dot Asp Net Core 3.1 já restaura as dependencias, mas segue o comando que só restaura as dependencias:
 
@@ -126,13 +153,13 @@ O build dot Asp Net Core 3.1 já restaura as dependencias, mas segue o comando q
 $ dotnet restore ./src/InvestmentReport.sln
 ```
 
-### Compilando Aplicação
+## Compilando Aplicação
  
 ```bash
 $ dotnet build ./src/
 ```
 
-### Publicação Localmente
+## Docker-Compose
 
 A publicação local irá subir dois containers, um com a api e outro com o redis, veja abaixo:
 
@@ -147,7 +174,7 @@ Para derrubar o ambiente local basta executar o comando abaixo:
 $ docker-cmopose down
 ```
 
-### Iniciando com Debug
+## Iniciando com Debug
 
 Para iniciar o debug é necessário que a aplicação esteja publicada localmente por causa do redis. Para publicar veja o tópico anterior.
 
@@ -165,8 +192,41 @@ Em seguida é só colocar o break point nos pontos que deseja debugar, veja exem
 
 > Será executada no endereço http://localhost:5000/InvestmentReport, basta acessar pelo navegador.
 
-#### Execução dos Testes
+## Execução dos Testes
 
 ```bash
 $ dotnet test ./src/
 ```
+
+# LOGS
+
+Os logs da aplicação são armazenados em um arquivo txt de nome "logger_yyyy-MM-dd.txt", onde o yyyy-MM-dd é DateTime.UtcNow.ToString("yyyy-MM-dd").
+
+> Localmente, seja via docker-compose ou debug os logs ficam armazenados em ./logs
+> Em produção ficam dentro do container da aplicação no diretório /wwwroot/logs
+
+# CI/CD
+
+Toda solução de CI/CD foi desenvolvida pelo CircleCI.
+
+<img src="https://github.com/macgyver1985/api-backend-to-investment-report/blob/master/docs/ci_cd.png" alt="CI/CD" width="800">
+
+O fluxo da pipeline é composto pelos seguinte passos:
+
+1. Clone do repositório.
+2. Execução dos testes unitários.
+3. Deploy da aplicação junto a Heroku.
+
+> Para mais detalhes veja em ./.circleci/config.yml
+
+Visando a melhor qualidade das entregas foram feitas as seguintes configurações:
+
+- O passo de testes da pipeline é executado para qualquer branch da aplicação após um push;
+- A branch master é protegida para receber push;
+- Qualquer PR que é aberta para master exige que os testes da branch de origem tenham ocorrido com sucesso.
+
+<img src="https://github.com/macgyver1985/api-backend-to-investment-report/blob/master/docs/pr.jpg" alt="Pull Request" width="800">
+
+# AMBIENTE PRODUTIVO
+
+O ambiente produtivo da aplicação encontra-se na Heroku e a url de acesso a api é https://investiment-report.herokuapp.com/InvestmentReport.
