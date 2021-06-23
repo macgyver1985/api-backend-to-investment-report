@@ -1,9 +1,9 @@
-using InvestimentReport.Domain.Investiments;
+using InvestimentReport.Domain.Interfaces;
 
 namespace InvestimentReport.Domain.Helpers
 {
 
-    public abstract class Tax
+    public abstract class Tax : ITax
     {
 
         public string Name { get; protected set; }
@@ -14,7 +14,7 @@ namespace InvestimentReport.Domain.Helpers
 
         public double Value { get; protected set; }
 
-        public abstract void Calculate(Investiment investiment);
+        public abstract ITax Calculate(IInvestiment investiment);
 
     }
 
