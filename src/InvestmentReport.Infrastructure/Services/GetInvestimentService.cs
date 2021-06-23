@@ -14,6 +14,9 @@ using RestSharp;
 namespace InvestmentReport.Infrastructure.Services
 {
 
+    /// <summary>
+    /// Classe que busca os investimentos do cliente de serviços externos.
+    /// </summary>
     public sealed class GetInvestmentService : AdapterHelper, IGetInvestments
     {
 
@@ -23,6 +26,12 @@ namespace InvestmentReport.Infrastructure.Services
         private readonly string cacheKey;
         private readonly string cacheTotalTime;
 
+        /// <summary>
+        /// Construtor padrão.
+        /// </summary>
+        /// <param name="configuration">Intância de IConfiguration.</param>
+        /// <param name="cacheAdapter">Instância da implementação concreta de ICache.</param>
+        /// <param name="loggerAdapter">Instância da implementação concreta de ILogger.</param>
         public GetInvestmentService(
             IConfiguration configuration,
             ICache cacheAdapter,
@@ -60,6 +69,12 @@ namespace InvestmentReport.Infrastructure.Services
             disposed = true;
         }
 
+        /// <summary>
+        /// Método que faz a requisição ao serviço externo para obter os dados.
+        /// </summary>
+        /// <typeparam name="T">Tipo do DTO que será obtido.</typeparam>
+        /// <param name="processId">Identificação do processo.</param>
+        /// <returns>Retorna lista de T.</returns>
         public async Task<IList<T>> GetOf<T>(Guid processId)
         {
             List<T> result = await this.GetCachedInvestments<T>(processId) ?? null;
@@ -72,6 +87,17 @@ namespace InvestmentReport.Infrastructure.Services
 
             try
             {
+                await this.loggerAdapter
+                    .Debug<GetInvestmentService, object>(
+                        processId,
+                        $"Executando integração",
+                        new
+                        {
+                            urlService = this.configuration[url],
+                            DTO = typeof(T).Name
+                        }
+                    );
+
                 RestClient restClient = new RestClient(this.configuration[url]);
                 RestRequest restRequest = new RestRequest(Method.GET)
                 {
@@ -96,7 +122,7 @@ namespace InvestmentReport.Infrastructure.Services
                         ex,
                         new
                         {
-                            urlService = url,
+                            urlService = this.configuration[url],
                             response = response?.Content,
                             statusCode = response?.StatusCode
                         }
@@ -113,6 +139,12 @@ namespace InvestmentReport.Infrastructure.Services
             return null;
         }
 
+        /// <summary>
+        /// Método auxiliar que obtem os dados do cache pelo ICache.
+        /// </summary>
+        /// <typeparam name="T">DTO que será obtido.</typeparam>
+        /// <param name="processId">Identificação do processamento.</param>
+        /// <returns>Retorna a lista de T que está cacheada.</returns>
         private async Task<List<T>> GetCachedInvestments<T>(Guid processId)
         {
             try
@@ -120,7 +152,16 @@ namespace InvestmentReport.Infrastructure.Services
                 string responseCache = await this.cacheAdapter.Obtain($"{this.cacheKey}{typeof(T).Name}");
 
                 if (!string.IsNullOrWhiteSpace(responseCache))
+                {
+                    await this.loggerAdapter
+                        .Debug<GetInvestmentService, object>(
+                            processId,
+                            $"Lista de dados obtida do cache",
+                            typeof(T).Name
+                        );
+
                     return JsonConvert.DeserializeObject<List<T>>(responseCache);
+                }
             }
             catch (Exception ex)
             {
@@ -135,6 +176,13 @@ namespace InvestmentReport.Infrastructure.Services
             return null;
         }
 
+        /// <summary>
+        /// Método auxiliar que faz registra o cache pelo ICache.
+        /// </summary>
+        /// <typeparam name="T">DTO que será cacheado.</typeparam>
+        /// <param name="processId">Identificação do processamento.</param>
+        /// <param name="list">Lista de dados que será cacheado.</param>
+        /// <returns>Retorno void.</returns>
         private async Task ResgisterInvestmentsInCache<T>(Guid processId, List<T> list)
         {
             string payload = string.Empty;
@@ -150,6 +198,13 @@ namespace InvestmentReport.Infrastructure.Services
                     payload,
                     expire
                 );
+
+                await this.loggerAdapter
+                    .Debug<GetInvestmentService, object>(
+                        processId,
+                        $"Lista de dados registrada no cache",
+                        typeof(T).Name
+                    );
             }
             catch (Exception ex)
             {

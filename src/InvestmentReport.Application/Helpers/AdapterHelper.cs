@@ -3,6 +3,9 @@ using System;
 namespace InvestmentReport.Application.Helper
 {
 
+    /// <summary>
+    /// Classe que auxilia a implementação concreta dos adaptadores.
+    /// </summary>
     public abstract class AdapterHelper : IDisposable
     {
 

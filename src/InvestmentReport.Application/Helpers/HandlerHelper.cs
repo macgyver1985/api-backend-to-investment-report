@@ -3,6 +3,9 @@ using System;
 namespace InvestmentReport.Application.Helper
 {
 
+    /// <summary>
+    /// Classe que auxilia a implementação concreta das handlers.
+    /// </summary>
     public abstract class HandlerHelper : IDisposable
     {
 
