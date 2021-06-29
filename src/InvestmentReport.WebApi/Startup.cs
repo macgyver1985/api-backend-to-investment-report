@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using InvestmentReport.Application.Interfaces.Adapters;
@@ -13,7 +14,9 @@ using InvestmentReport.Infrastructure.Cache;
 using InvestmentReport.Infrastructure.Services;
 using InvestmentReport.WebApi.HealthCheck;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +24,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 
 namespace InvestmentReport.WebApi
 {
@@ -38,11 +42,15 @@ namespace InvestmentReport.WebApi
         {
             services.AddSingleton<ILogger, LoggerInFile>();
             services.AddSingleton<ICache, Redis>();
-            services.AddSingleton<IObtainAllInvestmentsHandler, ObtainAllInvestmentsHandler>();
-            services.AddSingleton<IGetInvestments, GetInvestmentService>();
-            services.AddControllers();
+            services.AddScoped<IObtainAllInvestmentsHandler, ObtainAllInvestmentsHandler>();
+            services.AddScoped<IGetInvestments, GetInvestmentService>();
 
-            services.AddHealthChecks()
+            services
+                .AddControllers()
+                .AddNewtonsoftJson();
+
+            services
+                .AddHealthChecks()
                 .AddCheck(
                     "Cache-check",
                     new CacheHealthCheck(new Redis(this.Configuration)),
@@ -79,10 +87,31 @@ namespace InvestmentReport.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
+            if (env.IsDevelopment() || env.IsEnvironment("Local"))
                 app.UseDeveloperExceptionPage();
-            }
+            else
+                app.UseExceptionHandler(option => option.Run(async context =>
+                {
+                    var logger = context.RequestServices.GetService<ILogger>();
+                    var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+                    var exception = exceptionHandlerPathFeature.Error;
+
+                    var x = exceptionHandlerPathFeature.Error.TargetSite.DeclaringType.DeclaringType;
+
+                    var result = JsonConvert.SerializeObject(new { error = exception.Message });
+
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    context.Response.ContentType = "application/json";
+
+                    await context.Response.WriteAsync(result);
+                }));
+
+            app.Use(async (context, next) =>
+            {
+                context.Request.Headers.TryAdd("ProcessId", Guid.NewGuid().ToString());
+
+                await next.Invoke();
+            });
 
             app.UseHttpsRedirection();
 
@@ -94,7 +123,6 @@ namespace InvestmentReport.WebApi
             {
                 c.SerializeAsV2 = true;
             });
-
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "API-INVESTMENT-REPORT V1");

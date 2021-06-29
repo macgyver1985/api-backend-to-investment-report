@@ -7,6 +7,7 @@ using InvestmentReport.CrossCutting.Trace.Interfaces;
 using InvestmentReport.WebApi.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace InvestmentReport.WebApi.Controllers
 {
@@ -37,45 +38,46 @@ namespace InvestmentReport.WebApi.Controllers
         /// </summary>
         /// <returns>Instância de uma ListInvestmentsModel.</returns>
         /// <response code="200">Retorna a lista dos investimentos consolidados.</response>
+        /// <response code="204">Não foram encontrados investimentos.</response>
+        /// <response code="500">Erro interno de processamento.</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Get()
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Get([FromHeader] Guid processId)
         {
-            var processId = Guid.NewGuid();
-
             var temp = await this.obtainAllInvestmentsHandler
                 .Execute(processId);
 
-            if (temp != null && temp.Any())
+            throw new Exception("teste");
+
+            if (temp == null || !temp.Any())
+                return NoContent();
+
+            ListInvestmentsModel result = new ListInvestmentsModel()
             {
-                ListInvestmentsModel result = new ListInvestmentsModel()
+                ProcessId = processId
+            };
+
+            temp.ToList().ForEach(t =>
+            {
+                var item = new InvestmentModel()
                 {
-                    ProcessId = processId
+                    CurrentValue = t.CurrentValue,
+                    DueDate = t.DueDate,
+                    InvestedValue = t.InvestedValue,
+                    Name = t.Name,
+                    RedemptionValue = t.RedemptionValue,
+                    IrTax = t.Taxes.FirstOrDefault(tax => tax.Name == "IR").Value
                 };
 
-                temp.ToList().ForEach(t =>
-                {
-                    var item = new InvestmentModel()
-                    {
-                        ValorTotal = t.CurrentValue,
-                        Vencimento = t.DueDate,
-                        ValorInvestido = t.InvestedValue,
-                        Nome = t.Name,
-                        ValorResgate = t.RedemptionValue,
-                        Ir = t.Taxes.FirstOrDefault(tax => tax.Name == "IR").Value
-                    };
+                result.Investments.Add(item);
+            });
 
-                    result.Investmentos.Add(item);
-                });
-
-                return new JsonResult(result, new JsonSerializerOptions
-                {
-                    WriteIndented = true,
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                });
-            }
-
-            return null;
+            return new JsonResult(result, new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+            });
         }
     }
 }

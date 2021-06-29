@@ -49,7 +49,6 @@ namespace InvestmentReport.Application.Service
 
             if (disposing)
             {
-                this.loggerAdapter.Dispose();
                 this.getInvestmentsAdapter.Dispose();
             }
 
@@ -66,8 +65,8 @@ namespace InvestmentReport.Application.Service
         {
             try
             {
-                await this.loggerAdapter
-                    .Debug<ObtainAllInvestmentsHandler, string>(
+                this.loggerAdapter
+                    .Debug<ObtainAllInvestmentsHandler>(
                         processId,
                         $"Iniciando integração com IGetInvestments",
                         typeof(T).Name
@@ -79,7 +78,7 @@ namespace InvestmentReport.Application.Service
             }
             catch (Exception ex)
             {
-                await this.loggerAdapter
+                this.loggerAdapter
                     .Error<ObtainAllInvestmentsHandler>(
                         processId,
                         $"Erro na integração para obter os investmento de {typeof(T).Name}.",
@@ -100,11 +99,10 @@ namespace InvestmentReport.Application.Service
             if (processId == Guid.Empty)
                 throw new ArgumentException("processId is empty.");
 
-            await this.loggerAdapter
-                .Debug<ObtainAllInvestmentsHandler, string>(
+            this.loggerAdapter
+                .Debug<ObtainAllInvestmentsHandler>(
                     processId,
-                    $"Iniciando execução do serviço de dominio {nameof(ObtainAllInvestmentsHandler)}",
-                    null
+                    $"Iniciando execução do serviço de dominio {nameof(ObtainAllInvestmentsHandler)}"
                 );
 
             List<Investment> result = new List<Investment>();
@@ -169,11 +167,10 @@ namespace InvestmentReport.Application.Service
                         result.Add(item);
                     });
 
-            await this.loggerAdapter
-                .Debug<ObtainAllInvestmentsHandler, string>(
+            this.loggerAdapter
+                .Debug<ObtainAllInvestmentsHandler>(
                     processId,
-                    $"Execução de ${nameof(ObtainAllInvestmentsHandler)} finalizada.",
-                    null
+                    $"Execução de ${nameof(ObtainAllInvestmentsHandler)} finalizada."
                 );
 
             if (!result.Any())

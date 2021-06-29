@@ -7,6 +7,9 @@ using Newtonsoft.Json;
 namespace InvestmentReport.CrossCutting.Trace.Helpers
 {
 
+    /// <summary>
+    /// Classe que de suporte para construção de outras implementações do ILogger.
+    /// </summary>
     public abstract class LoggerHelper : IDisposable
     {
 
@@ -14,6 +17,9 @@ namespace InvestmentReport.CrossCutting.Trace.Helpers
         protected bool disposed = false;
         private readonly Queue queue;
 
+        /// <summary>
+        /// Construtor padrão.
+        /// </summary>
         public LoggerHelper()
         {
             this.queue = new Queue();
@@ -34,9 +40,19 @@ namespace InvestmentReport.CrossCutting.Trace.Helpers
 
         protected abstract void Dispose(bool disposing);
 
+        /// <summary>
+        /// Método que recebe a fila contendo as mensagens que devem ser persistidas. Esse método é iniciado com ThreadPool.QueueUserWorkItem.
+        /// </summary>
+        /// <param name="state">Instância de um System.Collections.Queue.</param>
+        /// <see cref="System.Threading.ThreadPool.QueueUserWorkItem(WaitCallback, object?)"/>
         protected abstract void LoggerWatch(object state);
 
-        protected void PushQueue<TPayload>(LoggerDTO<TPayload> data)
+        /// <summary>
+        /// Método que coloca a mensagem na fila para ser persisitda.
+        /// </summary>
+        /// <param name="data">Instância do InvestmentReport.CrossCutting.Trace.DTOs.LoggerDTO que contém os dados que serão persistidos.</param>
+        /// <see cref="InvestmentReport.CrossCutting.Trace.DTOs.LoggerDTO"/>
+        protected void PushQueue(LoggerDTO data)
         {
             try
             {
