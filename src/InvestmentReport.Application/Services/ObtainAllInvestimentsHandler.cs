@@ -66,7 +66,7 @@ namespace InvestmentReport.Application.Service
             try
             {
                 this.loggerAdapter
-                    .Debug<ObtainAllInvestmentsHandler>(
+                    .Debug(
                         processId,
                         $"Iniciando integração com IGetInvestments",
                         typeof(T).Name
@@ -79,7 +79,7 @@ namespace InvestmentReport.Application.Service
             catch (Exception ex)
             {
                 this.loggerAdapter
-                    .Error<ObtainAllInvestmentsHandler>(
+                    .Error(
                         processId,
                         $"Erro na integração para obter os investmento de {typeof(T).Name}.",
                         ex
@@ -100,7 +100,7 @@ namespace InvestmentReport.Application.Service
                 throw new ArgumentException("processId is empty.");
 
             this.loggerAdapter
-                .Debug<ObtainAllInvestmentsHandler>(
+                .Debug(
                     processId,
                     $"Iniciando execução do serviço de dominio {nameof(ObtainAllInvestmentsHandler)}"
                 );
@@ -168,7 +168,7 @@ namespace InvestmentReport.Application.Service
                     });
 
             this.loggerAdapter
-                .Debug<ObtainAllInvestmentsHandler>(
+                .Debug(
                     processId,
                     $"Execução de ${nameof(ObtainAllInvestmentsHandler)} finalizada."
                 );

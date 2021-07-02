@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using InvestmentReport.Application.Interfaces.Services;
 using InvestmentReport.CrossCutting.Trace.Interfaces;
 using InvestmentReport.WebApi.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace InvestmentReport.WebApi.Controllers
 {
@@ -36,6 +34,9 @@ namespace InvestmentReport.WebApi.Controllers
         /// <summary>
         /// Retorna o relatório consolidado dos investimentos do cliente.
         /// </summary>
+        /// <param name="processId">
+        /// Guid que deve ser passado pelo header da request para identificar o processo.
+        /// </param>
         /// <returns>Instância de uma ListInvestmentsModel.</returns>
         /// <response code="200">Retorna a lista dos investimentos consolidados.</response>
         /// <response code="204">Não foram encontrados investimentos.</response>
@@ -44,12 +45,10 @@ namespace InvestmentReport.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get([FromHeader] Guid processId)
+        public async Task<ActionResult<ListInvestmentsModel>> Get([FromHeader] Guid processId)
         {
             var temp = await this.obtainAllInvestmentsHandler
                 .Execute(processId);
-
-            throw new Exception("teste");
 
             if (temp == null || !temp.Any())
                 return NoContent();
@@ -74,10 +73,7 @@ namespace InvestmentReport.WebApi.Controllers
                 result.Investments.Add(item);
             });
 
-            return new JsonResult(result, new JsonSerializerSettings
-            {
-                Formatting = Formatting.Indented,
-            });
+            return result;
         }
     }
 }

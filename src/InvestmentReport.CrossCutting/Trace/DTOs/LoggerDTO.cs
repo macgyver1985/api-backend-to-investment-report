@@ -19,8 +19,25 @@ namespace InvestmentReport.CrossCutting.Trace.DTOs
         /// <summary>
         /// Indicação do tipo da mensagem.
         /// </summary>
+        [JsonIgnore()]
+        public ELoggerType Type { get; set; }
+
+        /// <summary>
+        /// Retorna o nome do tipo da mensagem.
+        /// </summary>
         [JsonProperty("type")]
-        public string Type { get; set; }
+        public string TypeName
+        {
+            get
+            {
+                return Enum.GetName(typeof(ELoggerType), this.Type);
+            }
+            set
+            {
+                if (Enum.TryParse(typeof(ELoggerType), value, true, out object val))
+                    this.Type = (ELoggerType)val;
+            }
+        }
 
         /// <summary>
         /// Guid de identificação do processo.
@@ -33,6 +50,12 @@ namespace InvestmentReport.CrossCutting.Trace.DTOs
         /// </summary>
         [JsonProperty("context")]
         public string Context { get; set; }
+
+        /// <summary>
+        /// Nome do método que gerou a mensagem.
+        /// </summary>
+        [JsonProperty("method")]
+        public string Method { get; set; }
 
         /// <summary>
         /// Texto descritivo da mensagem.

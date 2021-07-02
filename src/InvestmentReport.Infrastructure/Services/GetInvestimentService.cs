@@ -76,7 +76,7 @@ namespace InvestmentReport.Infrastructure.Services
             try
             {
                 this.loggerAdapter
-                    .Debug<GetInvestmentService>(
+                    .Debug(
                         processId,
                         $"Executando integração",
                         new
@@ -104,7 +104,7 @@ namespace InvestmentReport.Infrastructure.Services
             catch (Exception ex)
             {
                 this.loggerAdapter
-                    .Error<GetInvestmentService>(
+                    .Error(
                         processId,
                         $"Erro ao tentar obter a lista de investmentos {typeof(T).Name}.",
                         ex,
@@ -142,7 +142,7 @@ namespace InvestmentReport.Infrastructure.Services
                 if (!string.IsNullOrWhiteSpace(responseCache))
                 {
                     this.loggerAdapter
-                        .Debug<GetInvestmentService>(
+                        .Debug(
                             processId,
                             $"Lista de dados obtida do cache",
                             typeof(T).Name
@@ -154,7 +154,7 @@ namespace InvestmentReport.Infrastructure.Services
             catch (Exception ex)
             {
                 this.loggerAdapter
-                    .Error<GetInvestmentService>(
+                    .Error(
                         processId,
                         $"Erro ao tentar obter o cache {this.cacheKey}{typeof(T).Name}.",
                         ex
@@ -188,7 +188,7 @@ namespace InvestmentReport.Infrastructure.Services
                 );
 
                 this.loggerAdapter
-                    .Debug<GetInvestmentService>(
+                    .Debug(
                         processId,
                         $"Lista de dados registrada no cache",
                         typeof(T).Name
@@ -197,7 +197,7 @@ namespace InvestmentReport.Infrastructure.Services
             catch (Exception ex)
             {
                 this.loggerAdapter
-                    .Error<GetInvestmentService>(
+                    .Error(
                         processId,
                         $"Erro ao tentar registrar o cache {this.cacheKey}{typeof(T).Name}.",
                         ex,

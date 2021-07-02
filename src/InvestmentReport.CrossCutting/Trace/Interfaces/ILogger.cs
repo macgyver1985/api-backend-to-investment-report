@@ -31,13 +31,12 @@ namespace InvestmentReport.CrossCutting.Trace.Interfaces
         /// <remarks>
         /// IsLoggerEnable e IsError devem estar habilitados, ou seja, retornando true.
         /// </remarks>
-        /// <typeparam name="Context">Contexto de onde a mensagem pertence.</typeparam>
         /// <param name="processId">Identificação do processo que gerou o log.</param>
         /// <param name="message">Mensagem customizada do log.</param>
         /// <param name="ex">Instância de uma System.Exception.</param>
         /// <param name="payload">Estrutura de dados relacionada com a mensagem de log.</param>
         /// <returns>Retorna ILogger.</returns>
-        ILogger Error<Context>(Guid processId, string message, Exception ex, object payload);
+        ILogger Error(Guid processId, string message, Exception ex, object payload);
 
         /// <summary>
         /// Envia mensagem de erro para serer persistida.
@@ -45,12 +44,11 @@ namespace InvestmentReport.CrossCutting.Trace.Interfaces
         /// <remarks>
         /// IsLoggerEnable e IsError devem estar habilitados, ou seja, retornando true.
         /// </remarks>
-        /// <typeparam name="Context">Contexto de onde a mensagem pertence.</typeparam>
         /// <param name="processId">Identificação do processo que gerou o log.</param>
         /// <param name="message">Mensagem customizada do log.</param>
         /// <param name="ex">Instância de uma System.Exception.</param>
         /// <returns>Retorna ILogger.</returns>
-        ILogger Error<Context>(Guid processId, string message, Exception ex);
+        ILogger Error(Guid processId, string message, Exception ex);
 
         /// <summary>
         /// Envia mensagem de debug para serer persistida.
@@ -58,12 +56,11 @@ namespace InvestmentReport.CrossCutting.Trace.Interfaces
         /// <remarks>
         /// IsLoggerEnable e IsDebug devem estar habilitados, ou seja, retornando true.
         /// </remarks>
-        /// <typeparam name="Context">Contexto de onde a mensagem pertence.</typeparam>
         /// <param name="processId">Identificação do processo que gerou o log.</param>
         /// <param name="message">Mensagem customizada do log.</param>
         /// <param name="payload">Estrutura de dados relacionada com a mensagem de log.</param>
         /// <returns>Retorna ILogger.</returns>
-        ILogger Debug<Context>(Guid processId, string message, object payload);
+        ILogger Debug(Guid processId, string message, object payload);
 
         /// <summary>
         /// Envia mensagem de debug para serer persistida.
@@ -71,11 +68,10 @@ namespace InvestmentReport.CrossCutting.Trace.Interfaces
         /// <remarks>
         /// IsLoggerEnable e IsDebug devem estar habilitados, ou seja, retornando true.
         /// </remarks>
-        /// <typeparam name="Context">Contexto de onde a mensagem pertence.</typeparam>
         /// <param name="processId">Identificação do processo que gerou o log.</param>
         /// <param name="message">Mensagem customizada do log.</param>
         /// <returns>Retorna ILogger.</returns>
-        ILogger Debug<Context>(Guid processId, string message);
+        ILogger Debug(Guid processId, string message);
 
         /// <summary>
         /// Envia mensagem de erro para serer persistida de forma assíncrona.
@@ -83,13 +79,12 @@ namespace InvestmentReport.CrossCutting.Trace.Interfaces
         /// <remarks>
         /// IsLoggerEnable e IsError devem estar habilitados, ou seja, retornando true.
         /// </remarks>
-        /// <typeparam name="Context">Contexto de onde a mensagem pertence.</typeparam>
         /// <param name="processId">Identificação do processo que gerou o log.</param>
         /// <param name="message">Mensagem customizada do log.</param>
         /// <param name="ex">Instância de uma System.Exception.</param>
         /// <param name="payload">Estrutura de dados relacionada com a mensagem de log.</param>
         /// <returns>Retorna ILogger.</returns>
-        Task<ILogger> ErrorAsync<Context>(Guid processId, string message, Exception ex, object payload);
+        Task<ILogger> ErrorAsync(Guid processId, string message, Exception ex, object payload);
 
         /// <summary>
         /// Envia mensagem de erro para serer persistida de forma assíncrona.
@@ -97,12 +92,11 @@ namespace InvestmentReport.CrossCutting.Trace.Interfaces
         /// <remarks>
         /// IsLoggerEnable e IsError devem estar habilitados, ou seja, retornando true.
         /// </remarks>
-        /// <typeparam name="Context">Contexto de onde a mensagem pertence.</typeparam>
         /// <param name="processId">Identificação do processo que gerou o log.</param>
         /// <param name="message">Mensagem customizada do log.</param>
         /// <param name="ex">Instância de uma System.Exception.</param>
         /// <returns>Retorna ILogger.</returns>
-        Task<ILogger> ErrorAsync<Context>(Guid processId, string message, Exception ex);
+        Task<ILogger> ErrorAsync(Guid processId, string message, Exception ex);
 
         /// <summary>
         /// Envia mensagem de debug para serer persistida de forma assíncrona.
@@ -110,12 +104,11 @@ namespace InvestmentReport.CrossCutting.Trace.Interfaces
         /// <remarks>
         /// IsLoggerEnable e IsDebug devem estar habilitados, ou seja, retornando true.
         /// </remarks>
-        /// <typeparam name="Context">Contexto de onde a mensagem pertence.</typeparam>
         /// <param name="processId">Identificação do processo que gerou o log.</param>
         /// <param name="message">Mensagem customizada do log.</param>
         /// <param name="payload">Estrutura de dados relacionada com a mensagem de log.</param>
         /// <returns>Retorna ILogger.</returns>
-        Task<ILogger> DebugAsync<Context>(Guid processId, string message, object payload);
+        Task<ILogger> DebugAsync(Guid processId, string message, object payload);
 
         /// <summary>
         /// Envia mensagem de debug para serer persistida de forma assíncrona.
@@ -123,11 +116,10 @@ namespace InvestmentReport.CrossCutting.Trace.Interfaces
         /// <remarks>
         /// IsLoggerEnable e IsDebug devem estar habilitados, ou seja, retornando true.
         /// </remarks>
-        /// <typeparam name="Context">Contexto de onde a mensagem pertence.</typeparam>
         /// <param name="processId">Identificação do processo que gerou o log.</param>
         /// <param name="message">Mensagem customizada do log.</param>
         /// <returns>Retorna ILogger.</returns>
-        Task<ILogger> DebugAsync<Context>(Guid processId, string message);
+        Task<ILogger> DebugAsync(Guid processId, string message);
 
     }
 

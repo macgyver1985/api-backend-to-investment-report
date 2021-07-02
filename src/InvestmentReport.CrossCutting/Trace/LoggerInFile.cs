@@ -3,11 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using InvestmentReport.CrossCutting.Trace.DTOs;
-using InvestmentReport.CrossCutting.Trace.Exceptions;
 using InvestmentReport.CrossCutting.Trace.Helpers;
-using InvestmentReport.CrossCutting.Trace.Interfaces;
 using Microsoft.Extensions.Configuration;
 
 namespace InvestmentReport.CrossCutting.Trace
@@ -21,7 +17,7 @@ namespace InvestmentReport.CrossCutting.Trace
     /// Veja o exemplo da configuração que deve ser feita:
     /// <code>
     /// {
-    ///     "LoggerInFile": {
+    ///     "Logger": {
     ///       "Path": "./../../logs/",
     ///       "IsLoggerEnable": true,
     ///       "IsError": true,
@@ -30,7 +26,8 @@ namespace InvestmentReport.CrossCutting.Trace
     /// }
     /// </code>
     /// </remarks>
-    public sealed class LoggerInFile : LoggerHelper, ILogger
+    /// <see cref="LoggerHelper"/>
+    public sealed class LoggerInFile : LoggerHelper
     {
 
         #region Variables
@@ -39,46 +36,20 @@ namespace InvestmentReport.CrossCutting.Trace
 
         #endregion
 
-        #region Properties
-
-        public bool IsLoggerEnable { get; private set; }
-
-        public bool IsError { get; private set; }
-
-        public bool IsDebug { get; private set; }
-
-        #endregion
-
         #region Constructors
 
         /// <summary>
         /// Construtor que recebe uma instância de Microsoft.Extensions.Configuration.IConfiguration.
+        /// Caso o diretório onde serão gravadas as mensagens não existe o mesmo será criado através do construtor da classe.
         /// </summary>
         /// <param name="configuration">Instância da classe concreta que implementa um Microsoft.Extensions.Configuration.IConfiguration.</param>
-        /// <exception cref="System.ArgumentException">
-        /// Exceção retornada caso uma instância de Microsoft.Extensions.Configuration.IConfiguration não seja informada.
-        /// </exception>
-        /// <exception cref="InvestmentReport.CrossCutting.Trace.Exceptions.ConfigurationException">
-        /// Exceção retornada caso hajam problemas nas configurações necessárias para o LoggerInFile.
-        /// </exception>
-        public LoggerInFile(IConfiguration configuration) : base()
+        /// <see cref="LoggerHelper.LoggerHelper(IConfiguration)"/>
+        public LoggerInFile(IConfiguration configuration) : base(configuration)
         {
-            if (configuration == null)
-                throw new ArgumentException("Configuration is null.", "configuration");
+            if (Directory.Exists(configuration["Logger:Path"]))
+                Directory.CreateDirectory(configuration["Logger:Path"]);
 
-            if (!configuration.GetSection("LoggerInFile").Exists())
-                throw new ConfigurationException("LoggerInFile");
-
-            if (string.IsNullOrEmpty(configuration["LoggerInFile:Path"]))
-                throw new ConfigurationException("LoggerInFile", "Path");
-
-            if (Directory.Exists(configuration["LoggerInFile:Path"]))
-                Directory.CreateDirectory(configuration["LoggerInFile:Path"]);
-
-            this.path = configuration["LoggerInFile:Path"];
-            this.IsLoggerEnable = bool.TryParse(configuration["LoggerInFile:IsLoggerEnable"], out bool enable) ? enable : true;
-            this.IsError = bool.TryParse(configuration["LoggerInFile:IsError"], out bool enableError) ? enableError : true;
-            this.IsDebug = bool.TryParse(configuration["LoggerInFile:IsDebug"], out bool enableDebug) ? enableDebug : true;
+            this.path = configuration["Logger:Path"];
         }
 
         #endregion
@@ -112,75 +83,6 @@ namespace InvestmentReport.CrossCutting.Trace
 
                 Thread.Sleep(500);
             }
-        }
-
-        public ILogger Error<Context>(Guid processId, string message, Exception ex, object payload)
-        {
-            if (this.IsLoggerEnable && this.IsError)
-                this.PushQueue(new LoggerDTO()
-                {
-                    CreatedDate = DateTime.UtcNow,
-                    Type = "ERROR",
-                    ProcessId = processId,
-                    Context = typeof(Context).Name,
-                    Message = message,
-                    Payload = payload,
-                    Exception = new ExceptionDTO()
-                    {
-                        Message = ex.Message,
-                        Source = ex.Source,
-                        StackTrace = ex.StackTrace,
-                        Type = $"{ex.GetType().Namespace}.{ex.GetType().Name}"
-                    }
-                });
-
-            return this;
-        }
-
-        public ILogger Error<Context>(Guid processId, string message, Exception ex)
-        {
-            return this.Error<Context>(processId, message, ex, null);
-        }
-
-        public ILogger Debug<Context>(Guid processId, string message, object payload)
-        {
-            if (this.IsLoggerEnable && this.IsDebug)
-                this.PushQueue(new LoggerDTO()
-                {
-                    CreatedDate = DateTime.UtcNow,
-                    Type = "DEBUG",
-                    ProcessId = processId,
-                    Context = typeof(Context).Name,
-                    Message = message,
-                    Payload = payload
-                });
-
-            return this;
-        }
-
-        public ILogger Debug<Context>(Guid processId, string message)
-        {
-            return this.Debug<Context>(processId, message, null);
-        }
-
-        public async Task<ILogger> ErrorAsync<Context>(Guid processId, string message, Exception ex, object payload)
-        {
-            return await Task.Factory.StartNew(() => this.Error<Context>(processId, message, ex, payload));
-        }
-
-        public async Task<ILogger> ErrorAsync<Context>(Guid processId, string message, Exception ex)
-        {
-            return await Task.Factory.StartNew(() => this.Error<Context>(processId, message, ex, null));
-        }
-
-        public async Task<ILogger> DebugAsync<Context>(Guid processId, string message, object payload)
-        {
-            return await Task.Factory.StartNew(() => this.Debug<Context>(processId, message, payload));
-        }
-
-        public async Task<ILogger> DebugAsync<Context>(Guid processId, string message)
-        {
-            return await Task.Factory.StartNew(() => this.Debug<Context>(processId, message, null));
         }
 
         #endregion

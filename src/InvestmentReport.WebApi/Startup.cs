@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using InvestmentReport.Application.Interfaces.Adapters;
 using InvestmentReport.Application.Interfaces.Services;
@@ -19,6 +20,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -44,9 +46,10 @@ namespace InvestmentReport.WebApi
             services.AddSingleton<ICache, Redis>();
             services.AddScoped<IObtainAllInvestmentsHandler, ObtainAllInvestmentsHandler>();
             services.AddScoped<IGetInvestments, GetInvestmentService>();
+            services.AddScoped<HttpResponseExceptionFilter>();
 
             services
-                .AddControllers()
+                .AddControllers(opt => opt.Filters.Add(typeof(HttpResponseExceptionFilter)))
                 .AddNewtonsoftJson();
 
             services
@@ -134,5 +137,24 @@ namespace InvestmentReport.WebApi
                 endpoints.MapHealthChecks("/hc");
             });
         }
+    }
+
+    public class HttpResponseExceptionFilter : IActionFilter
+    {
+
+        public void OnActionExecuting(ActionExecutingContext context) { }
+
+        public void OnActionExecuted(ActionExecutedContext context)
+        {
+            // if (context.Exception is HttpResponseException exception)
+            // {
+            //     context.Result = new ObjectResult(exception.Value)
+            //     {
+            //         StatusCode = exception.Status,
+            //     };
+            //     context.ExceptionHandled = true;
+            // }
+        }
+
     }
 }
