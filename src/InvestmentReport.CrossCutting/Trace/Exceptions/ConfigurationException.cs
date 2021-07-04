@@ -4,7 +4,7 @@ namespace InvestmentReport.CrossCutting.Trace.Exceptions
 {
 
     /// <summary>
-    /// Classe de exceção para as configurações do Logger.
+    /// Classe de exceção para as configurações incorretas do Logger.
     /// </summary>
     public sealed class ConfigurationException : Exception
     {

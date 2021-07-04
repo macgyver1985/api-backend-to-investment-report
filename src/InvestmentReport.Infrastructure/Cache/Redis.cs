@@ -12,7 +12,8 @@ namespace InvestmentReport.Infrastructure.Cache
     public sealed class Redis : AdapterHelper, ICache
     {
 
-        private readonly ConnectionMultiplexer connection;
+        private ConnectionMultiplexer connection;
+        private readonly string connectionString;
 
         public Redis(IConfiguration configuration)
         {
@@ -22,19 +23,15 @@ namespace InvestmentReport.Infrastructure.Cache
             if (string.IsNullOrEmpty(configuration["REDIS_URL"]))
                 throw new ArgumentException("REDIS_URL is null.");
 
-            string connectionString = string.Empty;
-
             if (new Regex(@"^(redis:\/\/)").IsMatch(configuration["REDIS_URL"]))
             {
                 var redisUri = new Uri(configuration["REDIS_URL"]);
                 var userInfo = redisUri.UserInfo.Split(':');
 
-                connectionString = $"{redisUri.Host}:{redisUri.Port},password={userInfo[1]}";
+                this.connectionString = $"{redisUri.Host}:{redisUri.Port},password={userInfo[1]}";
             }
             else
-                connectionString = configuration["REDIS_URL"];
-
-            this.connection = ConnectionMultiplexer.Connect(connectionString);
+                this.connectionString = configuration["REDIS_URL"];
         }
 
         protected override void Dispose(bool disposing)
@@ -44,15 +41,23 @@ namespace InvestmentReport.Infrastructure.Cache
 
             if (disposing)
             {
-                this.connection.Close();
-                this.connection.Dispose();
+                this.connection?.Close();
+                this.connection?.Dispose();
             }
 
             disposed = true;
         }
 
+        private async Task Connection()
+        {
+            if (this.connection == null)
+                this.connection = await ConnectionMultiplexer.ConnectAsync(connectionString);
+        }
+
         public async Task<string> Obtain(string key)
         {
+            await this.Connection();
+
             IDatabase db = null;
 
             lock (this.synchronizeTasks)
@@ -68,6 +73,8 @@ namespace InvestmentReport.Infrastructure.Cache
 
         public async Task<bool> Register(string key, string value, TimeSpan expire)
         {
+            await this.Connection();
+
             IDatabase db = null;
 
             lock (this.synchronizeTasks)
@@ -85,6 +92,8 @@ namespace InvestmentReport.Infrastructure.Cache
 
         public async Task Remove(string key)
         {
+            await this.Connection();
+
             IDatabase db = null;
 
             lock (this.synchronizeTasks)

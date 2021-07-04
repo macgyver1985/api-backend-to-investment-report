@@ -4,7 +4,7 @@ namespace InvestmentReport.CrossCutting.Trace.DTOs
 {
 
     /// <summary>
-    /// Estrutura de dados para o erro da mensagem.
+    /// Estrutura de dados para o erro da mensagem de log.
     /// </summary>
     public class ExceptionDTO
     {
@@ -22,7 +22,7 @@ namespace InvestmentReport.CrossCutting.Trace.DTOs
         public string Source { get; set; }
 
         /// <summary>
-        /// Texto descritido do erro.
+        /// Descrição do erro.
         /// </summary>
         [JsonProperty("message")]
         public string Message { get; set; }

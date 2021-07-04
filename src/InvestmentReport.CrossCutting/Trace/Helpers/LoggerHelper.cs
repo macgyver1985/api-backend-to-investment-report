@@ -52,15 +52,16 @@ namespace InvestmentReport.CrossCutting.Trace.Helpers
         #region Constructors
 
         /// <summary>
-        /// Construtor que recebe uma instância de Microsoft.Extensions.Configuration.IConfiguration.
+        /// Construtor que recebe uma instância de IConfiguration.
         /// </summary>
-        /// <param name="configuration">Instância da classe concreta que implementa um Microsoft.Extensions.Configuration.IConfiguration.</param>
-        /// <exception cref="System.ArgumentException">
-        /// Exceção retornada caso uma instância de Microsoft.Extensions.Configuration.IConfiguration não seja informada.
+        /// <param name="configuration">Instância da classe concreta que implementa um IConfiguration.</param>
+        /// <exception cref="ArgumentException">
+        /// Exceção retornada caso uma instância de IConfiguration não seja informada.
         /// </exception>
-        /// <exception cref="InvestmentReport.CrossCutting.Trace.Exceptions.ConfigurationException">
+        /// <exception cref="ConfigurationException">
         /// Exceção retornada caso hajam problemas nas configurações necessárias para o Logger.
         /// </exception>
+        /// <see cref="IConfiguration"/>
         public LoggerHelper(IConfiguration configuration)
         {
             if (configuration == null)
@@ -102,14 +103,15 @@ namespace InvestmentReport.CrossCutting.Trace.Helpers
         /// Método que recebe a fila contendo as mensagens que devem ser persistidas. Esse método é iniciado com ThreadPool.QueueUserWorkItem.
         /// </summary>
         /// <param name="state">Instância de um System.Collections.Queue.</param>
-        /// <see cref="System.Threading.ThreadPool.QueueUserWorkItem(WaitCallback, object?)"/>
+        /// <see cref="ThreadPool.QueueUserWorkItem(WaitCallback, object?)"/>
+        /// <see cref="Queue"/>
         protected abstract void LoggerWatch(object state);
 
         /// <summary>
         /// Método que coloca a mensagem na fila para ser persisitda.
         /// </summary>
-        /// <param name="data">Instância do InvestmentReport.CrossCutting.Trace.DTOs.LoggerDTO que contém os dados que serão persistidos.</param>
-        /// <see cref="InvestmentReport.CrossCutting.Trace.DTOs.LoggerDTO"/>
+        /// <param name="data">Instância do LoggerDTO que contém os dados que serão persistidos.</param>
+        /// <see cref="LoggerDTO"/>
         private void PushQueue(LoggerDTO data)
         {
             try
