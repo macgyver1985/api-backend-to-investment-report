@@ -13,9 +13,11 @@ using InvestmentReport.CrossCutting.Trace;
 using InvestmentReport.CrossCutting.Trace.Interfaces;
 using InvestmentReport.Infrastructure.Cache;
 using InvestmentReport.Infrastructure.Services;
-using InvestmentReport.WebApi.HealthCheck;
+using InvestmentReport.WebApi.Helpers.HealthCheck;
+using InvestmentReport.WebApi.Helpers.HealthCheck.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -55,7 +57,7 @@ namespace InvestmentReport.WebApi
             services
                 .AddHealthChecks()
                 .AddCheck(
-                    "Cache-check",
+                    "Redis",
                     new CacheHealthCheck(new Redis(this.Configuration)),
                     HealthStatus.Unhealthy,
                     new string[] { "cache" }
@@ -134,7 +136,12 @@ namespace InvestmentReport.WebApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHealthChecks("/hc");
+            });
+
+            app.UseHealthChecks("/hc", new HealthCheckOptions()
+            {
+                Predicate = _ => true,
+                ResponseWriter = HealthCheckResponse.Json
             });
         }
     }
