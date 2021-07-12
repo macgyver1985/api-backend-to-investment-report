@@ -13,6 +13,8 @@ using InvestmentReport.CrossCutting.Trace;
 using InvestmentReport.CrossCutting.Trace.Interfaces;
 using InvestmentReport.Infrastructure.Cache;
 using InvestmentReport.Infrastructure.Services;
+using InvestmentReport.Presentation.Controllers;
+using InvestmentReport.Presentation.Interfaces.Controllers;
 using InvestmentReport.WebApi.Helpers.HealthCheck;
 using InvestmentReport.WebApi.Helpers.HealthCheck.UI;
 using Microsoft.AspNetCore.Builder;
@@ -48,6 +50,7 @@ namespace InvestmentReport.WebApi
             services.AddSingleton<ICache, Redis>();
             services.AddScoped<IObtainAllInvestmentsHandler, ObtainAllInvestmentsHandler>();
             services.AddScoped<IGetInvestments, GetInvestmentService>();
+            services.AddScoped<IReportController, ReportController>();
             services.AddScoped<HttpResponseExceptionFilter>();
 
             services

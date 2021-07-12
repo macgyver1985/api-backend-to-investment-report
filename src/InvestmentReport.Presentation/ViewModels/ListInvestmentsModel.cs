@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace InvestmentReport.WebApi.ViewModels
+namespace InvestmentReport.Presentation.ViewModels
 {
 
     public class ListInvestmentsModel
@@ -14,23 +14,15 @@ namespace InvestmentReport.WebApi.ViewModels
         {
             get
             {
-                if (!this.Investments.Any())
+                if (this.Investments == null || !this.Investments.Any())
                     return 0D;
 
                 return this.Investments.Sum(t => t.CurrentValue);
             }
         }
 
-        [JsonProperty("processId")]
-        public Guid ProcessId { get; set; }
-
         [JsonProperty("investimentos")]
-        public IList<InvestmentModel> Investments { get; private set; }
-
-        public ListInvestmentsModel()
-        {
-            this.Investments = new List<InvestmentModel>();
-        }
+        public IList<InvestmentModel> Investments { get; internal set; }
 
     }
 

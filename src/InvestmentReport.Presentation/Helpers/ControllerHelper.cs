@@ -1,18 +1,18 @@
 using System;
 
-namespace InvestmentReport.Application.Helpers
+namespace InvestmentReport.Presentation.Helpers
 {
 
     /// <summary>
-    /// Classe que auxilia a implementação concreta dos adaptadores.
+    /// Classe que auxilia a implementação concreta das controllers.
     /// </summary>
-    public abstract class AdapterHelper : IDisposable
+    public abstract class ControllerHelper : IDisposable
     {
 
         protected volatile object synchronizeTasks = new object();
         protected bool disposed = false;
 
-        ~AdapterHelper()
+        ~ControllerHelper()
         {
             Dispose(false);
         }

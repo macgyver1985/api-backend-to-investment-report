@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 
-namespace InvestmentReport.WebApi.ViewModels
+namespace InvestmentReport.Presentation.ViewModels
 {
 
     public class InvestmentModel

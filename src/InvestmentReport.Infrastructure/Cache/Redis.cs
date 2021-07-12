@@ -3,7 +3,7 @@ using System;
 using System.Threading.Tasks;
 using InvestmentReport.Application.Interfaces.Adapters;
 using StackExchange.Redis;
-using InvestmentReport.Application.Helper;
+using InvestmentReport.Application.Helpers;
 using System.Text.RegularExpressions;
 
 namespace InvestmentReport.Infrastructure.Cache

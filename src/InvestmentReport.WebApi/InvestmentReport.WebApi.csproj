@@ -2,9 +2,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\InvestmentReport.Application\InvestmentReport.Application.csproj" />
-    <ProjectReference Include="..\InvestmentReport.Domain\InvestmentReport.Domain.csproj" />
     <ProjectReference Include="..\InvestmentReport.Infrastructure\InvestmentReport.Infrastructure.csproj" />
     <ProjectReference Include="..\InvestmentReport.CrossCutting\InvestmentReport.CrossCutting.csproj" />
+    <ProjectReference Include="..\InvestmentReport.Presentation\InvestmentReport.Presentation.csproj" />
   </ItemGroup>
 
   <ItemGroup>

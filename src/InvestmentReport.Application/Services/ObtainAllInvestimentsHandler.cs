@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using InvestmentReport.Application.DTOs;
-using InvestmentReport.Application.Helper;
+using InvestmentReport.Application.Helpers;
 using InvestmentReport.Application.Interfaces.Adapters;
 using InvestmentReport.Application.Interfaces.Services;
 using InvestmentReport.CrossCutting.Trace.Interfaces;
@@ -170,7 +170,7 @@ namespace InvestmentReport.Application.Service
             this.loggerAdapter
                 .Debug(
                     processId,
-                    $"Execução de ${nameof(ObtainAllInvestmentsHandler)} finalizada."
+                    $"Execução de {nameof(ObtainAllInvestmentsHandler)} finalizada."
                 );
 
             if (!result.Any())
