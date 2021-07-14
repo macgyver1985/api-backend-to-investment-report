@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace InvestmentReport.WebApi.Helpers.HealthCheck.DTOs
+namespace InvestmentReport.WebApi.Resources.HealthCheck.DTOs
 {
 
     /// <summary>

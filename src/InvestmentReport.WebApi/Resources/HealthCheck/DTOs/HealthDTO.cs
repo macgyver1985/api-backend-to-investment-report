@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json;
 
-namespace InvestmentReport.WebApi.Helpers.HealthCheck.DTOs
+namespace InvestmentReport.WebApi.Resources.HealthCheck.DTOs
 {
 
     /// <summary>

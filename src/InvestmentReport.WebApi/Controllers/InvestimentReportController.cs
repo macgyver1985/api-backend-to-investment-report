@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using InvestmentReport.CrossCutting.Trace.Interfaces;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using InvestmentReport.Presentation.Helpers;
 using InvestmentReport.Presentation.Interfaces.Controllers;
 using InvestmentReport.Presentation.ViewModels;
@@ -18,15 +18,10 @@ namespace InvestmentReport.WebApi.Controllers
     public class InvestmentReportController : ControllerBase
     {
 
-        private readonly ILogger loggerAdapter;
         private readonly IReportController reportController;
 
-        public InvestmentReportController(
-            ILogger loggerAdapter,
-            IReportController reportController
-        )
+        public InvestmentReportController(IReportController reportController)
         {
-            this.loggerAdapter = loggerAdapter;
             this.reportController = reportController;
         }
 
@@ -44,7 +39,7 @@ namespace InvestmentReport.WebApi.Controllers
         public async Task<ActionResult<HttpResponse<ListInvestmentsModel>>> Get()
         {
             var response = await this.reportController
-                .action(new HttpRequest<object>(this.Request.Headers));
+                .action(new HttpRequest<object>(this.Request.Headers.ToArray()));
 
             return response;
         }

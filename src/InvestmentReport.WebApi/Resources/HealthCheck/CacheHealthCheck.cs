@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using InvestmentReport.Application.Interfaces.Adapters;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace InvestmentReport.WebApi.Helpers.HealthCheck
+namespace InvestmentReport.WebApi.Resources.HealthCheck
 {
 
     /// <summary>

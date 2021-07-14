@@ -15,8 +15,8 @@ using InvestmentReport.Infrastructure.Cache;
 using InvestmentReport.Infrastructure.Services;
 using InvestmentReport.Presentation.Controllers;
 using InvestmentReport.Presentation.Interfaces.Controllers;
-using InvestmentReport.WebApi.Helpers.HealthCheck;
-using InvestmentReport.WebApi.Helpers.HealthCheck.UI;
+using InvestmentReport.WebApi.Resources.HealthCheck;
+using InvestmentReport.WebApi.Resources.HealthCheck.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -156,14 +156,7 @@ namespace InvestmentReport.WebApi
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            // if (context.Exception is HttpResponseException exception)
-            // {
-            //     context.Result = new ObjectResult(exception.Value)
-            //     {
-            //         StatusCode = exception.Status,
-            //     };
-            //     context.ExceptionHandled = true;
-            // }
+            var x = context.Result as ObjectResult;
         }
 
     }

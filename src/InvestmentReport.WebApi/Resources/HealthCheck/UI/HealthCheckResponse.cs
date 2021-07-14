@@ -1,12 +1,12 @@
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using InvestmentReport.WebApi.Helpers.HealthCheck.DTOs;
+using InvestmentReport.WebApi.Resources.HealthCheck.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json;
 
-namespace InvestmentReport.WebApi.Helpers.HealthCheck.UI
+namespace InvestmentReport.WebApi.Resources.HealthCheck.UI
 {
 
     /// <summary>

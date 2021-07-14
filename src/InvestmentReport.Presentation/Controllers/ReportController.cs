@@ -52,7 +52,7 @@ namespace InvestmentReport.Presentation.Controllers
         {
             HttpResponse<ListInvestmentsModel> response = new HttpResponse<ListInvestmentsModel>();
 
-            if (Guid.TryParse(request.Headers["ProcessId"].ToString(), out Guid processId))
+            if (Guid.TryParse(request.Headers["ProcessId"], out Guid processId))
                 processId = Guid.NewGuid();
 
             try
