@@ -23,7 +23,7 @@ namespace InvestmentReport.WebApi.Resources.HealthCheck
     ///   );
     /// </code>
     /// </remarks>
-    public class CacheHealthCheck : IHealthCheck
+    internal class CacheHealthCheck : IHealthCheck
     {
         private readonly ICache cacheAdapter;
         private const string CACHE_KEY = "health-check";

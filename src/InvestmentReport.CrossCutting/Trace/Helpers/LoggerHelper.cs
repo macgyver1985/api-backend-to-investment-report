@@ -180,7 +180,7 @@ namespace InvestmentReport.CrossCutting.Trace.Helpers
 
         public ILogger Error(Guid processId, string message, Exception ex, object payload)
         {
-            return this.ErrorAux(processId, message, ex, null);
+            return this.ErrorAux(processId, message, ex, payload);
         }
 
         public ILogger Error(Guid processId, string message, Exception ex)
@@ -190,7 +190,7 @@ namespace InvestmentReport.CrossCutting.Trace.Helpers
 
         public ILogger Debug(Guid processId, string message, object payload)
         {
-            return this.DebugAux(processId, message, null);
+            return this.DebugAux(processId, message, payload);
         }
 
         public ILogger Debug(Guid processId, string message)

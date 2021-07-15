@@ -1,163 +1,45 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using InvestmentReport.Application.Interfaces.Adapters;
-using InvestmentReport.Application.Interfaces.Services;
-using InvestmentReport.Application.Service;
-using InvestmentReport.CrossCutting.Trace;
-using InvestmentReport.CrossCutting.Trace.Interfaces;
-using InvestmentReport.Infrastructure.Cache;
-using InvestmentReport.Infrastructure.Services;
-using InvestmentReport.Presentation.Controllers;
-using InvestmentReport.Presentation.Interfaces.Controllers;
-using InvestmentReport.WebApi.Resources.HealthCheck;
-using InvestmentReport.WebApi.Resources.HealthCheck.UI;
+using InvestmentReport.WebApi.Setup;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
 
 namespace InvestmentReport.WebApi
 {
     public class Startup
     {
+
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             this.Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<ILogger, LoggerInFile>();
-            services.AddSingleton<ICache, Redis>();
-            services.AddScoped<IObtainAllInvestmentsHandler, ObtainAllInvestmentsHandler>();
-            services.AddScoped<IGetInvestments, GetInvestmentService>();
-            services.AddScoped<IReportController, ReportController>();
-            services.AddScoped<HttpResponseExceptionFilter>();
+            IoCSetup.ConfigureServices(services, this.Configuration);
 
-            services
-                .AddControllers(opt => opt.Filters.Add(typeof(HttpResponseExceptionFilter)))
-                .AddNewtonsoftJson();
+            ControllersSetup.ConfigureServices(services, this.Configuration);
 
-            services
-                .AddHealthChecks()
-                .AddCheck(
-                    "Redis",
-                    new CacheHealthCheck(new Redis(this.Configuration)),
-                    HealthStatus.Unhealthy,
-                    new string[] { "cache" }
-                );
+            SwaggerSetup.ConfigureServices(services, this.Configuration);
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Version = "v1",
-                    Title = "API-INVESTMENT-REPORT",
-                    Description = "Projeto hipotético de um back-end que retorna um lista consolidada dos investimentos de um dado cliente.",
-                    Contact = new OpenApiContact
-                    {
-                        Name = "Felipe França",
-                        Url = new Uri("https://www.linkedin.com/in/felipe-augusto-franca/"),
-                    },
-                    License = new OpenApiLicense
-                    {
-                        Name = "GitHub",
-                        Url = new Uri("https://github.com/macgyver1985/api-backend-to-investment-report"),
-                    }
-                });
-
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-
-                c.IncludeXmlComments(xmlPath);
-            });
+            HealthCheckSetup.ConfigureServices(services, this.Configuration);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment() || env.IsEnvironment("Local"))
-                app.UseDeveloperExceptionPage();
-            else
-                app.UseExceptionHandler(option => option.Run(async context =>
-                {
-                    var logger = context.RequestServices.GetService<ILogger>();
-                    var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
-                    var exception = exceptionHandlerPathFeature.Error;
+            MiddlewareSetup.ConfigureApplication(app, env, this.Configuration);
 
-                    var x = exceptionHandlerPathFeature.Error.TargetSite.DeclaringType.DeclaringType;
+            AuthorizationSetup.ConfigureApplication(app, env, this.Configuration);
 
-                    var result = JsonConvert.SerializeObject(new { error = exception.Message });
+            ControllersSetup.ConfigureApplication(app, env, this.Configuration);
 
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    context.Response.ContentType = "application/json";
+            SwaggerSetup.ConfigureApplication(app, env, this.Configuration);
 
-                    await context.Response.WriteAsync(result);
-                }));
-
-            app.Use(async (context, next) =>
-            {
-                context.Request.Headers.TryAdd("ProcessId", Guid.NewGuid().ToString());
-
-                await next.Invoke();
-            });
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseSwagger(c =>
-            {
-                c.SerializeAsV2 = true;
-            });
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API-INVESTMENT-REPORT V1");
-            });
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
-            app.UseHealthChecks("/hc", new HealthCheckOptions()
-            {
-                Predicate = _ => true,
-                ResponseWriter = HealthCheckResponse.Json
-            });
-        }
-    }
-
-    public class HttpResponseExceptionFilter : IActionFilter
-    {
-
-        public void OnActionExecuting(ActionExecutingContext context) { }
-
-        public void OnActionExecuted(ActionExecutedContext context)
-        {
-            var x = context.Result as ObjectResult;
+            HealthCheckSetup.ConfigureApplication(app, env, this.Configuration);
         }
 
     }
+
 }

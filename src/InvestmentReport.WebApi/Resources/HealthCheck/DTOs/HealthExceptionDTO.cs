@@ -6,7 +6,7 @@ namespace InvestmentReport.WebApi.Resources.HealthCheck.DTOs
     /// <summary>
     /// Estrutura de dados para o erro do health check.
     /// </summary>
-    public class HealthExceptionDTO
+    internal class HealthExceptionDTO
     {
 
         /// <summary>

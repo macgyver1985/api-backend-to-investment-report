@@ -12,7 +12,7 @@ namespace InvestmentReport.WebApi.Resources.HealthCheck.UI
     /// <summary>
     /// Classe que auxília na apresentação dos relatório de verificação de saúde dos serviços configurados.
     /// </summary>
-    public static class HealthCheckResponse
+    internal static class HealthCheckResponse
     {
 
         /// <summary>

@@ -9,16 +9,16 @@ namespace InvestmentReport.Presentation.Helpers
     {
 
         [JsonProperty("statusCode")]
-        public HttpStatusCode StatusCode { get; internal set; }
+        public HttpStatusCode StatusCode { get; set; }
 
         [JsonProperty("processId")]
-        public Guid ProcessId { get; internal set; }
+        public Guid ProcessId { get; set; }
 
         [JsonProperty("success")]
-        public TData Success { get; internal set; }
+        public TData Success { get; set; }
 
         [JsonProperty("fault")]
-        public string Fault { get; internal set; }
+        public string Fault { get; set; }
 
     }
 

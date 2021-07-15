@@ -9,7 +9,7 @@ namespace InvestmentReport.WebApi.Resources.HealthCheck.DTOs
     /// <summary>
     /// Estrutura de dados que centraliza o resultado da verificação de saúde dos serviços configurados.
     /// </summary>
-    public class HealthDTO
+    internal class HealthDTO
     {
 
         /// <summary>
