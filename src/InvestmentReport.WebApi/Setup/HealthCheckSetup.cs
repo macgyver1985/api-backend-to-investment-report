@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using RestSharp;
 
 namespace InvestmentReport.WebApi.Setup
 {
@@ -23,7 +24,25 @@ namespace InvestmentReport.WebApi.Setup
                     "Redis",
                     new CacheHealthCheck(new Redis(configuration)),
                     HealthStatus.Unhealthy,
-                    new string[] { "cache" }
+                    new string[] { "CACHE-SERVICE" }
+                )
+                .AddCheck(
+                    "Direct Treasure",
+                    new IntegrationHealthCheck(configuration["GetInvestmentService:DirectTreasure"], Method.GET),
+                    HealthStatus.Unhealthy,
+                    new string[] { "HTTP-SERVICES" }
+                )
+                .AddCheck(
+                    "Fixed Income",
+                    new IntegrationHealthCheck(configuration["GetInvestmentService:FixedIncome"], Method.GET),
+                    HealthStatus.Unhealthy,
+                    new string[] { "HTTP-SERVICES" }
+                )
+                .AddCheck(
+                    "Funds",
+                    new IntegrationHealthCheck(configuration["GetInvestmentService:Funds"], Method.GET),
+                    HealthStatus.Unhealthy,
+                    new string[] { "HTTP-SERVICES" }
                 );
 
             services.AddHealthChecksUI(opt =>
@@ -31,7 +50,12 @@ namespace InvestmentReport.WebApi.Setup
                 opt.SetEvaluationTimeInSeconds(15);
                 opt.MaximumHistoryEntriesPerEndpoint(60);
                 opt.SetApiMaxActiveRequests(1);
-                opt.AddHealthCheckEndpoint("Investment Report Health", "/health-to-ui");
+
+                if (configuration["ASPNETCORE_ENVIRONMENT"] == "Development")
+                    opt.AddHealthCheckEndpoint("Investment Report Health", $"http://localhost:80/health-to-ui");
+
+                else
+                    opt.AddHealthCheckEndpoint("Investment Report Health", $"{configuration["ASPNETCORE_URLS"]}/health-to-ui");
             })
             .AddInMemoryStorage();
         }

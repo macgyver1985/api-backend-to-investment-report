@@ -29,38 +29,38 @@ namespace InvestmentReport.WebApi.Setup
                 await next.Invoke();
             });
 
-            // if (env.IsDevelopment() || env.IsEnvironment("Local"))
-            //     app.UseDeveloperExceptionPage();
-            // else
-            app.UseExceptionHandler(option => option.Run(async context =>
-            {
-                if (!Guid.TryParse(context.Request.Headers["ProcessId"], out Guid processId))
-                    processId = Guid.NewGuid();
-
-                var logger = context.RequestServices.GetService<ILogger>();
-                var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
-                var result = new HttpResponse<object>()
+            if (env.IsEnvironment("Local"))
+                app.UseDeveloperExceptionPage();
+            else
+                app.UseExceptionHandler(option => option.Run(async context =>
                 {
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Fault = exceptionHandlerPathFeature.Error.Message,
-                    ProcessId = processId
-                };
+                    if (!Guid.TryParse(context.Request.Headers["ProcessId"], out Guid processId))
+                        processId = Guid.NewGuid();
 
-                logger.Error(
-                    processId,
-                    "Erro interceptado no manipulador de exceção.",
-                    exceptionHandlerPathFeature.Error,
-                    new
+                    var logger = context.RequestServices.GetService<ILogger>();
+                    var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+                    var result = new HttpResponse<object>()
                     {
-                        controller = exceptionHandlerPathFeature.Path
-                    }
-                );
+                        StatusCode = HttpStatusCode.InternalServerError,
+                        Fault = exceptionHandlerPathFeature.Error.Message,
+                        ProcessId = processId
+                    };
 
-                context.Response.StatusCode = (int)result.StatusCode;
-                context.Response.ContentType = "application/json";
+                    logger.Error(
+                        processId,
+                        "Erro interceptado no manipulador de exceção.",
+                        exceptionHandlerPathFeature.Error,
+                        new
+                        {
+                            controller = exceptionHandlerPathFeature.Path
+                        }
+                    );
 
-                await context.Response.WriteAsync(JsonConvert.SerializeObject(result, Formatting.Indented));
-            }));
+                    context.Response.StatusCode = (int)result.StatusCode;
+                    context.Response.ContentType = "application/json";
+
+                    await context.Response.WriteAsync(JsonConvert.SerializeObject(result, Formatting.Indented));
+                }));
         }
 
     }
