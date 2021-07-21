@@ -1,6 +1,6 @@
 using System;
 
-namespace InvestmentReport.Application.Helper
+namespace InvestmentReport.Application.Helpers
 {
 
     /// <summary>

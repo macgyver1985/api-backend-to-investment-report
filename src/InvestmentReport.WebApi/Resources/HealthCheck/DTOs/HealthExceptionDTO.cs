@@ -1,12 +1,12 @@
 using Newtonsoft.Json;
 
-namespace InvestmentReport.CrossCutting.Trace.DTOs
+namespace InvestmentReport.WebApi.Resources.HealthCheck.DTOs
 {
 
     /// <summary>
-    /// Estrutura de dados para o erro da mensagem de log.
+    /// Estrutura de dados para o erro do health check.
     /// </summary>
-    public class ExceptionDTO
+    internal class HealthExceptionDTO
     {
 
         /// <summary>

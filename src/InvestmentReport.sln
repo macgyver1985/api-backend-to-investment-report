@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvestmentReport.WebApi", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvestmentReport.CrossCutting", "InvestmentReport.CrossCutting\InvestmentReport.CrossCutting.csproj", "{DF81D9A5-CDAF-48D4-80E2-B745B658C1F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvestmentReport.Presentation", "InvestmentReport.Presentation\InvestmentReport.Presentation.csproj", "{4E131DD2-863A-404D-8BEC-AF195826C262}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,5 +102,17 @@ Global
 		{DF81D9A5-CDAF-48D4-80E2-B745B658C1F9}.Release|x64.Build.0 = Release|Any CPU
 		{DF81D9A5-CDAF-48D4-80E2-B745B658C1F9}.Release|x86.ActiveCfg = Release|Any CPU
 		{DF81D9A5-CDAF-48D4-80E2-B745B658C1F9}.Release|x86.Build.0 = Release|Any CPU
+		{4E131DD2-863A-404D-8BEC-AF195826C262}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E131DD2-863A-404D-8BEC-AF195826C262}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E131DD2-863A-404D-8BEC-AF195826C262}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4E131DD2-863A-404D-8BEC-AF195826C262}.Debug|x64.Build.0 = Debug|Any CPU
+		{4E131DD2-863A-404D-8BEC-AF195826C262}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4E131DD2-863A-404D-8BEC-AF195826C262}.Debug|x86.Build.0 = Debug|Any CPU
+		{4E131DD2-863A-404D-8BEC-AF195826C262}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E131DD2-863A-404D-8BEC-AF195826C262}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E131DD2-863A-404D-8BEC-AF195826C262}.Release|x64.ActiveCfg = Release|Any CPU
+		{4E131DD2-863A-404D-8BEC-AF195826C262}.Release|x64.Build.0 = Release|Any CPU
+		{4E131DD2-863A-404D-8BEC-AF195826C262}.Release|x86.ActiveCfg = Release|Any CPU
+		{4E131DD2-863A-404D-8BEC-AF195826C262}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

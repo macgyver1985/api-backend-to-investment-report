@@ -1,10 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Text.Json;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using InvestmentReport.Application.Interfaces.Services;
-using InvestmentReport.CrossCutting.Trace.Interfaces;
-using InvestmentReport.WebApi.ViewModels;
+using InvestmentReport.Presentation.Helpers;
+using InvestmentReport.Presentation.Interfaces.Controllers;
+using InvestmentReport.Presentation.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,16 +18,11 @@ namespace InvestmentReport.WebApi.Controllers
     public class InvestmentReportController : ControllerBase
     {
 
-        private readonly ILogger loggerAdapter;
-        private readonly IObtainAllInvestmentsHandler obtainAllInvestmentsHandler;
+        private readonly IReportController reportController;
 
-        public InvestmentReportController(
-            ILogger loggerAdapter,
-            IObtainAllInvestmentsHandler obtainAllInvestmentsHandler
-        )
+        public InvestmentReportController(IReportController reportController)
         {
-            this.loggerAdapter = loggerAdapter;
-            this.obtainAllInvestmentsHandler = obtainAllInvestmentsHandler;
+            this.reportController = reportController;
         }
 
         /// <summary>
@@ -37,45 +30,20 @@ namespace InvestmentReport.WebApi.Controllers
         /// </summary>
         /// <returns>Instância de uma ListInvestmentsModel.</returns>
         /// <response code="200">Retorna a lista dos investimentos consolidados.</response>
+        /// <response code="204">Não foram encontrados investimentos.</response>
+        /// <response code="500">Erro interno de processamento.</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Get()
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<HttpResponse<ListInvestmentsModel>>> Get()
         {
-            var processId = Guid.NewGuid();
+            var response = await this.reportController
+                .action(new HttpRequest<object>(this.Request.Headers.ToArray()));
 
-            var temp = await this.obtainAllInvestmentsHandler
-                .Execute(processId);
-
-            if (temp != null && temp.Any())
-            {
-                ListInvestmentsModel result = new ListInvestmentsModel()
-                {
-                    ProcessId = processId
-                };
-
-                temp.ToList().ForEach(t =>
-                {
-                    var item = new InvestmentModel()
-                    {
-                        ValorTotal = t.CurrentValue,
-                        Vencimento = t.DueDate,
-                        ValorInvestido = t.InvestedValue,
-                        Nome = t.Name,
-                        ValorResgate = t.RedemptionValue,
-                        Ir = t.Taxes.FirstOrDefault(tax => tax.Name == "IR").Value
-                    };
-
-                    result.Investmentos.Add(item);
-                });
-
-                return new JsonResult(result, new JsonSerializerOptions
-                {
-                    WriteIndented = true,
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                });
-            }
-
-            return null;
+            return response;
         }
+
     }
+
 }

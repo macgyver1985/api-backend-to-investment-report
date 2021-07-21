@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using InvestmentReport.Application.Helper;
+using InvestmentReport.Application.Helpers;
 using InvestmentReport.Application.Interfaces.Adapters;
 using InvestmentReport.CrossCutting.Trace.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -55,19 +55,7 @@ namespace InvestmentReport.Infrastructure.Services
             this.cacheTotalTime = configuration[$"{nameof(GetInvestmentService)}:cacheTotalTime"];
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposed)
-                return;
-
-            if (disposing)
-            {
-                this.cacheAdapter.Dispose();
-                this.loggerAdapter.Dispose();
-            }
-
-            disposed = true;
-        }
+        protected override void Dispose(bool disposing) { }
 
         /// <summary>
         /// Método que faz a requisição ao serviço externo para obter os dados.
@@ -87,8 +75,8 @@ namespace InvestmentReport.Infrastructure.Services
 
             try
             {
-                await this.loggerAdapter
-                    .Debug<GetInvestmentService, object>(
+                this.loggerAdapter
+                    .Debug(
                         processId,
                         $"Executando integração",
                         new
@@ -115,8 +103,8 @@ namespace InvestmentReport.Infrastructure.Services
             }
             catch (Exception ex)
             {
-                await this.loggerAdapter
-                    .Error<GetInvestmentService, object>(
+                this.loggerAdapter
+                    .Error(
                         processId,
                         $"Erro ao tentar obter a lista de investmentos {typeof(T).Name}.",
                         ex,
@@ -153,8 +141,8 @@ namespace InvestmentReport.Infrastructure.Services
 
                 if (!string.IsNullOrWhiteSpace(responseCache))
                 {
-                    await this.loggerAdapter
-                        .Debug<GetInvestmentService, object>(
+                    this.loggerAdapter
+                        .Debug(
                             processId,
                             $"Lista de dados obtida do cache",
                             typeof(T).Name
@@ -165,8 +153,8 @@ namespace InvestmentReport.Infrastructure.Services
             }
             catch (Exception ex)
             {
-                await this.loggerAdapter
-                    .Error<GetInvestmentService>(
+                this.loggerAdapter
+                    .Error(
                         processId,
                         $"Erro ao tentar obter o cache {this.cacheKey}{typeof(T).Name}.",
                         ex
@@ -199,8 +187,8 @@ namespace InvestmentReport.Infrastructure.Services
                     expire
                 );
 
-                await this.loggerAdapter
-                    .Debug<GetInvestmentService, object>(
+                this.loggerAdapter
+                    .Debug(
                         processId,
                         $"Lista de dados registrada no cache",
                         typeof(T).Name
@@ -208,8 +196,8 @@ namespace InvestmentReport.Infrastructure.Services
             }
             catch (Exception ex)
             {
-                await this.loggerAdapter
-                    .Error<GetInvestmentService, List<T>>(
+                this.loggerAdapter
+                    .Error(
                         processId,
                         $"Erro ao tentar registrar o cache {this.cacheKey}{typeof(T).Name}.",
                         ex,
