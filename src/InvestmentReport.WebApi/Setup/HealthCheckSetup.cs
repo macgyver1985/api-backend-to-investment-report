@@ -53,7 +53,8 @@ namespace InvestmentReport.WebApi.Setup
 
                 if (configuration["ASPNETCORE_ENVIRONMENT"] == "Development")
                     opt.AddHealthCheckEndpoint("Investment Report Health", $"http://localhost:80/health-to-ui");
-
+                else if (configuration["ASPNETCORE_ENVIRONMENT"] == "Production")
+                    opt.AddHealthCheckEndpoint("Investment Report Health", $"https://investiment-report.herokuapp.com/health-to-ui");
                 else
                     opt.AddHealthCheckEndpoint("Investment Report Health", $"{configuration["ASPNETCORE_URLS"]}/health-to-ui");
             })
