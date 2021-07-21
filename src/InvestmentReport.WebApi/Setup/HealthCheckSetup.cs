@@ -1,3 +1,4 @@
+using HealthChecks.UI.Client;
 using InvestmentReport.Infrastructure.Cache;
 using InvestmentReport.WebApi.Resources.HealthCheck;
 using InvestmentReport.WebApi.Resources.HealthCheck.UI;
@@ -24,14 +25,34 @@ namespace InvestmentReport.WebApi.Setup
                     HealthStatus.Unhealthy,
                     new string[] { "cache" }
                 );
+
+            services.AddHealthChecksUI(opt =>
+            {
+                opt.SetEvaluationTimeInSeconds(15);
+                opt.MaximumHistoryEntriesPerEndpoint(60);
+                opt.SetApiMaxActiveRequests(1);
+                opt.AddHealthCheckEndpoint("Investment Report Health", "/health-to-ui");
+            })
+            .AddInMemoryStorage();
         }
 
         public static void ConfigureApplication(IApplicationBuilder app, IWebHostEnvironment env, IConfiguration configuration)
         {
-            app.UseHealthChecks("/hc", new HealthCheckOptions()
+            app.UseHealthChecks("/health", new HealthCheckOptions()
             {
                 Predicate = _ => true,
                 ResponseWriter = HealthCheckResponse.Json
+            });
+
+            app.UseEndpoints(endpoint =>
+            {
+                endpoint.MapHealthChecks("/health-to-ui", new HealthCheckOptions
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+
+                endpoint.MapHealthChecksUI();
             });
         }
 

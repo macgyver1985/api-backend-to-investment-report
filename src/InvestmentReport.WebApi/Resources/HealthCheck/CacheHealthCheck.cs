@@ -64,7 +64,7 @@ namespace InvestmentReport.WebApi.Resources.HealthCheck
                 return new HealthCheckResult(status: context.Registration.FailureStatus, exception: ex);
             }
 
-            return HealthCheckResult.Healthy();
+            return HealthCheckResult.Healthy("Executing Successfully");
         }
     }
 
