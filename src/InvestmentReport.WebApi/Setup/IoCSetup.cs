@@ -23,7 +23,7 @@ namespace InvestmentReport.WebApi.Setup
             services.AddSingleton<ICache, Redis>();
             services.AddScoped<IObtainAllInvestmentsHandler, ObtainAllInvestmentsHandler>();
             services.AddScoped<IGetInvestments, GetInvestmentService>();
-            services.AddScoped<IReportController, ReportController>();
+            services.AddScoped<IObtainAllInvestmentsController, ObtainAllInvestmentsController>();
             services.AddScoped<ResponseFilter>();
         }
 

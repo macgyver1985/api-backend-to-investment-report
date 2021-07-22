@@ -13,14 +13,24 @@ using InvestmentReport.Presentation.ViewModels;
 namespace InvestmentReport.Presentation.Controllers
 {
 
-    public sealed class ReportController
-        : ControllerHelper, IReportController
+    /// <summary>
+    /// Classe que trata a requisição e a resposta HTTP referente ao relatório consolidado dos investimentos de uma dado cliente.
+    /// </summary>
+    /// <see cref="ControllerHelper"/>
+    /// <see cref="IObtainAllInvestmentsController"/>
+    public sealed class ObtainAllInvestmentsController
+        : ControllerHelper, IObtainAllInvestmentsController
     {
 
         private readonly ILogger loggerAdapter;
         private readonly IObtainAllInvestmentsHandler obtainAllInvestmentsHandler;
 
-        public ReportController(
+        /// <summary>
+        /// Construtor padrão da classe.
+        /// </summary>
+        /// <param name="loggerAdapter">Instância de qualquer classe que implemente a interface <see cref="ILogger"/>.</param>
+        /// <param name="obtainAllInvestmentsHandler">Instância de qualquer classe que implemente a interface <see cref="IObtainAllInvestmentsHandler"/>.</param>
+        public ObtainAllInvestmentsController(
             ILogger loggerAdapter,
             IObtainAllInvestmentsHandler obtainAllInvestmentsHandler
         )
@@ -48,6 +58,11 @@ namespace InvestmentReport.Presentation.Controllers
             disposed = true;
         }
 
+        /// <summary>
+        /// Método que trata a requisição e a resposta HTTP referente ao relatório consolidado dos investimentos do cliente.
+        /// </summary>
+        /// <param name="request">Instância de um <see cref="HttpRequest{TData}"/> onde TData é do tipo <see cref="object"/>.</param>
+        /// <returns>Instância de um <see cref="HttpResponse{TData}"/> onde TData é do tipo <see cref="ListInvestmentsModel"/>.</returns>
         public async Task<HttpResponse<ListInvestmentsModel>> action(HttpRequest<object> request)
         {
             HttpResponse<ListInvestmentsModel> response = new HttpResponse<ListInvestmentsModel>();

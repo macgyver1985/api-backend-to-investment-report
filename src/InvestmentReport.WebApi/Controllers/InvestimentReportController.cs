@@ -18,17 +18,17 @@ namespace InvestmentReport.WebApi.Controllers
     public class InvestmentReportController : ControllerBase
     {
 
-        private readonly IReportController reportController;
+        private readonly IObtainAllInvestmentsController obtainAllInvestments;
 
-        public InvestmentReportController(IReportController reportController)
+        public InvestmentReportController(IObtainAllInvestmentsController obtainAllInvestments)
         {
-            this.reportController = reportController;
+            this.obtainAllInvestments = obtainAllInvestments;
         }
 
         /// <summary>
         /// Retorna o relatório consolidado dos investimentos do cliente.
         /// </summary>
-        /// <returns>Instância de uma ListInvestmentsModel.</returns>
+        /// <returns>Instância de uma <see cref="HttpResponse{TData}"/> onde TData é do tipo <see cref="ListInvestmentsModel"/>.</returns>
         /// <response code="200">Retorna a lista dos investimentos consolidados.</response>
         /// <response code="204">Não foram encontrados investimentos.</response>
         /// <response code="500">Erro interno de processamento.</response>
@@ -38,7 +38,7 @@ namespace InvestmentReport.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<HttpResponse<ListInvestmentsModel>>> Get()
         {
-            var response = await this.reportController
+            var response = await this.obtainAllInvestments
                 .action(new HttpRequest<object>(this.Request.Headers.ToArray()));
 
             return response;

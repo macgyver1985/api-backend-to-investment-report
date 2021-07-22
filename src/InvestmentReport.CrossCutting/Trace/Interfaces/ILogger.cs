@@ -33,9 +33,9 @@ namespace InvestmentReport.CrossCutting.Trace.Interfaces
         /// </remarks>
         /// <param name="processId">Identificação do processo que gerou o log.</param>
         /// <param name="message">Mensagem customizada do log.</param>
-        /// <param name="ex">Instância de uma System.Exception.</param>
+        /// <param name="ex">Instância de uma <see cref="Exception"/>.</param>
         /// <param name="payload">Estrutura de dados relacionada com a mensagem de log.</param>
-        /// <returns>Retorna ILogger.</returns>
+        /// <returns>Retorna <see cref="ILogger"/>.</returns>
         ILogger Error(Guid processId, string message, Exception ex, object payload);
 
         /// <summary>
@@ -46,8 +46,8 @@ namespace InvestmentReport.CrossCutting.Trace.Interfaces
         /// </remarks>
         /// <param name="processId">Identificação do processo que gerou o log.</param>
         /// <param name="message">Mensagem customizada do log.</param>
-        /// <param name="ex">Instância de uma System.Exception.</param>
-        /// <returns>Retorna ILogger.</returns>
+        /// <param name="ex">Instância de uma <see cref="Exception"/>.</param>
+        /// <returns>Retorna <see cref="ILogger"/>.</returns>
         ILogger Error(Guid processId, string message, Exception ex);
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace InvestmentReport.CrossCutting.Trace.Interfaces
         /// <param name="processId">Identificação do processo que gerou o log.</param>
         /// <param name="message">Mensagem customizada do log.</param>
         /// <param name="payload">Estrutura de dados relacionada com a mensagem de log.</param>
-        /// <returns>Retorna ILogger.</returns>
+        /// <returns>Retorna <see cref="ILogger"/>.</returns>
         ILogger Debug(Guid processId, string message, object payload);
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace InvestmentReport.CrossCutting.Trace.Interfaces
         /// </remarks>
         /// <param name="processId">Identificação do processo que gerou o log.</param>
         /// <param name="message">Mensagem customizada do log.</param>
-        /// <returns>Retorna ILogger.</returns>
+        /// <returns>Retorna <see cref="ILogger"/>.</returns>
         ILogger Debug(Guid processId, string message);
 
         /// <summary>
@@ -81,9 +81,9 @@ namespace InvestmentReport.CrossCutting.Trace.Interfaces
         /// </remarks>
         /// <param name="processId">Identificação do processo que gerou o log.</param>
         /// <param name="message">Mensagem customizada do log.</param>
-        /// <param name="ex">Instância de uma System.Exception.</param>
+        /// <param name="ex">Instância de uma <see cref="Exception"/>.</param>
         /// <param name="payload">Estrutura de dados relacionada com a mensagem de log.</param>
-        /// <returns>Retorna ILogger.</returns>
+        /// <returns>Retorna <see cref="ILogger"/>.</returns>
         Task<ILogger> ErrorAsync(Guid processId, string message, Exception ex, object payload);
 
         /// <summary>
@@ -94,8 +94,8 @@ namespace InvestmentReport.CrossCutting.Trace.Interfaces
         /// </remarks>
         /// <param name="processId">Identificação do processo que gerou o log.</param>
         /// <param name="message">Mensagem customizada do log.</param>
-        /// <param name="ex">Instância de uma System.Exception.</param>
-        /// <returns>Retorna ILogger.</returns>
+        /// <param name="ex">Instância de uma <see cref="Exception"/>.</param>
+        /// <returns>Retorna <see cref="ILogger"/>.</returns>
         Task<ILogger> ErrorAsync(Guid processId, string message, Exception ex);
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace InvestmentReport.CrossCutting.Trace.Interfaces
         /// <param name="processId">Identificação do processo que gerou o log.</param>
         /// <param name="message">Mensagem customizada do log.</param>
         /// <param name="payload">Estrutura de dados relacionada com a mensagem de log.</param>
-        /// <returns>Retorna ILogger.</returns>
+        /// <returns>Retorna <see cref="ILogger"/>.</returns>
         Task<ILogger> DebugAsync(Guid processId, string message, object payload);
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace InvestmentReport.CrossCutting.Trace.Interfaces
         /// </remarks>
         /// <param name="processId">Identificação do processo que gerou o log.</param>
         /// <param name="message">Mensagem customizada do log.</param>
-        /// <returns>Retorna ILogger.</returns>
+        /// <returns>Retorna <see cref="ILogger"/>.</returns>
         Task<ILogger> DebugAsync(Guid processId, string message);
 
     }

@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 namespace InvestmentReport.WebApi.Resources.Filters
 {
 
+    /// <summary>
+    /// Filtro que padroniza as respostas de todas as actions.
+    /// </summary>
     internal class ResponseFilter : IActionFilter
     {
 

@@ -18,10 +18,8 @@ namespace InvestmentReport.WebApi.Resources.HealthCheck.UI
         /// <summary>
         /// Método que converte os dados do HealthReport para um HealthDTO.
         /// </summary>
-        /// <param name="report">Recebe instância de um HealthReport.</param>
-        /// <returns>Retorna instância de um HealthDTO.</returns>
-        /// <see cref="HealthDTO"/>
-        /// <see cref="HealthReport"/>
+        /// <param name="report">Recebe instância de um <see cref="HealthReport"/>.</param>
+        /// <returns>Retorna instância de um <see cref="HealthDTO"/>.</returns>
         private static HealthDTO ConvertToDTO(HealthReport report)
         {
             HealthDTO result = new HealthDTO()
@@ -60,8 +58,8 @@ namespace InvestmentReport.WebApi.Resources.HealthCheck.UI
         /// <summary>
         /// Método assíncrono que retorna os dados do relatório de saúde em Json.
         /// </summary>
-        /// <param name="context">Instância de um HttpContext.</param>
-        /// <param name="report">Instância de um HealthReport.</param>
+        /// <param name="context">Instância de um <see cref="HttpContext"/>.</param>
+        /// <param name="report">Instância de um <see cref="HealthReport"/>.</param>
         /// <returns>Retorna instância de uma Task.</returns>
         /// <remarks>
         /// Deve ser usado nas opções de configuração do middleware de verificação de saúde conforme exemplo abaixo:

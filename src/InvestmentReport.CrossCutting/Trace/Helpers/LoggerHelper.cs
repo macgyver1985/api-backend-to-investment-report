@@ -54,14 +54,13 @@ namespace InvestmentReport.CrossCutting.Trace.Helpers
         /// <summary>
         /// Construtor que recebe uma instância de IConfiguration.
         /// </summary>
-        /// <param name="configuration">Instância da classe concreta que implementa um IConfiguration.</param>
+        /// <param name="configuration">Instância da classe concreta que implementa um <see cref="IConfiguration"/>.</param>
         /// <exception cref="ArgumentException">
         /// Exceção retornada caso uma instância de IConfiguration não seja informada.
         /// </exception>
         /// <exception cref="ConfigurationException">
         /// Exceção retornada caso hajam problemas nas configurações necessárias para o Logger.
         /// </exception>
-        /// <see cref="IConfiguration"/>
         public LoggerHelper(IConfiguration configuration)
         {
             if (configuration == null)
@@ -100,18 +99,15 @@ namespace InvestmentReport.CrossCutting.Trace.Helpers
         protected abstract void Dispose(bool disposing);
 
         /// <summary>
-        /// Método que recebe a fila contendo as mensagens que devem ser persistidas. Esse método é iniciado com ThreadPool.QueueUserWorkItem.
+        /// Método que recebe a fila contendo as mensagens que devem ser persistidas. Esse método é iniciado com <see cref="ThreadPool.QueueUserWorkItem(WaitCallback, object?)"/>.
         /// </summary>
-        /// <param name="state">Instância de um System.Collections.Queue.</param>
-        /// <see cref="ThreadPool.QueueUserWorkItem(WaitCallback, object?)"/>
-        /// <see cref="Queue"/>
+        /// <param name="state">Instância de um <see cref="Queue"/>.</param>
         protected abstract void LoggerWatch(object state);
 
         /// <summary>
         /// Método que coloca a mensagem na fila para ser persisitda.
         /// </summary>
-        /// <param name="data">Instância do LoggerDTO que contém os dados que serão persistidos.</param>
-        /// <see cref="LoggerDTO"/>
+        /// <param name="data">Instância do <see cref="LoggerDTO"/> que contém os dados que serão persistidos.</param>
         private void PushQueue(LoggerDTO data)
         {
             try

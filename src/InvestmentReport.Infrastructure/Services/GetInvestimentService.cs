@@ -27,7 +27,7 @@ namespace InvestmentReport.Infrastructure.Services
         private readonly string cacheTotalTime;
 
         /// <summary>
-        /// Construtor padrão.
+        /// Construtor padrão da classe.
         /// </summary>
         /// <param name="configuration">Intância de IConfiguration.</param>
         /// <param name="cacheAdapter">Instância da implementação concreta de ICache.</param>

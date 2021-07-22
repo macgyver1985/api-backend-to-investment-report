@@ -43,11 +43,9 @@ namespace InvestmentReport.WebApi.Resources.HealthCheck
         /// <summary>
         /// Método assíncrono que é executado pelo middleware de verificação de saúde.
         /// </summary>
-        /// <param name="context">Instância de uma HealthCheckContext.</param>
-        /// <param name="cancellationToken">Instância do token de cancelamento da verificação de saúde.</param>
-        /// <returns>Retorna instância de uma Task de HealthCheckResult</returns>
-        /// <see cref="HealthCheckContext"/>
-        /// <see cref="HealthCheckResult"/>
+        /// <param name="context">Instância de uma <see cref="HealthCheckContext"/>.</param>
+        /// <param name="cancellationToken">Instância do <see cref="CancellationToken"/> da verificação de saúde.</param>
+        /// <returns>Retorna instância de uma Task de <see cref="HealthCheckResult"/>.</returns>
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default(CancellationToken))
         {
             try

@@ -4,7 +4,7 @@ using InvestmentReport.Presentation.ViewModels;
 namespace InvestmentReport.Presentation.Interfaces.Controllers
 {
 
-    public interface IReportController
+    public interface IObtainAllInvestmentsController
         : IController<object, ListInvestmentsModel>
     { }
 

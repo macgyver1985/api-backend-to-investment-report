@@ -39,10 +39,10 @@ namespace InvestmentReport.CrossCutting.Trace
         #region Constructors
 
         /// <summary>
-        /// Construtor que recebe uma instância de Microsoft.Extensions.Configuration.IConfiguration.
+        /// Construtor que recebe uma instância de <see cref="IConfiguration"/>.
         /// Caso o diretório onde serão gravadas as mensagens não existe o mesmo será criado através do construtor da classe.
         /// </summary>
-        /// <param name="configuration">Instância da classe concreta que implementa um Microsoft.Extensions.Configuration.IConfiguration.</param>
+        /// <param name="configuration">Instância da classe concreta que implementa um <see cref="IConfiguration"/>.</param>
         /// <see cref="LoggerHelper.LoggerHelper(IConfiguration)"/>
         public LoggerInFile(IConfiguration configuration) : base(configuration)
         {

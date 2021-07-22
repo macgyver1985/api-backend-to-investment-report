@@ -66,7 +66,7 @@ namespace InvestmentReport.CrossCutting.Trace.DTOs
         /// <summary>
         /// Instância de um ExceptionDTO.
         /// </summary>
-        /// <see cref="InvestmentReport.CrossCutting.Trace.DTOs.ExceptionDTO"/>
+        /// <see cref="ExceptionDTO"/>
         [JsonProperty("exception")]
         public ExceptionDTO Exception { get; set; }
 
